@@ -1,0 +1,52 @@
+
+# TODO Add more files in the future
+
+# compiled output
+dist
+
+# Abhaengige Dateien durch npm
+node_modules
+package-lock.json
+
+# Sensible Daten (Passwort, Token, private Schluessel)
+extras/compose/library/.env
+extras/compose/keycloak/tls/key.pem
+extras/compose/postgres/password.txt
+extras/compose/postgres/init/tls/server.key
+extras/bruno/javascript/environments
+src/config/resources/tls/key.pem
+test/lasttest-locust/__pycache__
+test/lasttest-locust/.venv
+test/postman
+sonar-project.properties
+
+# SonarQube
+.sonar
+
+# IDEs and editors
+.idea
+*.iml
+.env
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.sonarlint
+
+# Logs
+log
+logs
+*.log
+pnpm-debug.log*
+lerna-debug.log*
+.scannerwork
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+/src/generated/prisma
