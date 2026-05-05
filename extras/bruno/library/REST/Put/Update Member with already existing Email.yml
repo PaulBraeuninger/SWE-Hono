@@ -1,0 +1,43 @@
+info:
+  name: Update Member with already existing email
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "3"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+          "first_name": "Updated",
+          "last_name": "Member",
+          "gender": "M",
+          "date_of_birth": "1990-01-01",
+          "member_since": "2020-01-01",
+          "is_student": true,
+          "email_address": "admin@example.com"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.body.detail
+      operator: contains
+      value: Email
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

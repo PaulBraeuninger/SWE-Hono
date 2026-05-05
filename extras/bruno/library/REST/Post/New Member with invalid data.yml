@@ -1,0 +1,67 @@
+info:
+  name: New Member with invalid data
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "username": "invalid_user",
+        "first_name": "wrong first name",
+        "last_name": "completely wrong surname",
+        "gender": "X",
+        "date_of_birth": "2000-01-01",
+        "member_since": "2024-01-01",
+        "email_address": "wrong_email@",
+        "is_student": false,
+        "interests": [],
+        "address": {
+          "postal_code": "1234",
+          "place": "Nonexistent"
+          },
+        "books": []
+      }
+  auth:
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        test('Error messages in Response Body', () => {
+          const responseBody = res.getBody();
+          const props = ['first_name', 'last_name', 'gender', 'email_address', 'address'];
+
+          if (Object.keys(responseBody).length === 1 && Array.isArray(responseBody.detail)) {
+            expect(responseBody.detail).to.be.a('array').that.is.not.empty;
+            const detailLoc = responseBody.detail.map(elem => elem.loc[1]);
+            expect(detailLoc).to.be.an('array').that.has.a.lengthOf(props.length).to.have.deep.members(props);
+            return;
+          }
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/json
+    - expression: res.body.detail
+      operator: isArray
+    - expression: res.body.detail 
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

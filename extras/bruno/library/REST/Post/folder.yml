@@ -1,0 +1,11 @@
+info:
+  name: Post
+  type: folder
+  seq: 7
+
+request:
+  auth: inherit
+
+docs:
+  content: Insert new members by using REST API.
+  type: text/markdown

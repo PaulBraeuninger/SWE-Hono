@@ -1,0 +1,88 @@
+info:
+  name: New Member with invalid data
+  type: graphql
+  seq: 2
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    query: |-
+      mutation {
+        createMember(
+          memberInput: {
+            username: "invalid_graphql"
+            firstName: "wrong first name"
+            lastName: "wrong last name"
+            gender: MALE
+            dateOfBirth: "1990-01-01"
+            memberSince: "2020-01-01"
+            isStudent: false
+            emailAddress: "invalid@"
+            interests: [FANTASY]
+            address: {
+              postalCode: "123"
+              place: "wrong city"
+              }
+            books: [
+              {
+                name: "GraphQL for Beginners"
+                isbn: "9783161484100"
+                author: "John Doe"
+                stillBorrowed: false
+                genre: NON_FICTION
+              }
+            ]
+          }
+        ) {
+          id
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/json
+    - expression: res.body.errors
+      operator: isArray
+    - expression: res.body.errors
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: firstName
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: lastName
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: emailAddress
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: address
+    - expression: res.body.errors[0].message
+      operator: contains
+      value: books
+    - expression: res.body.errors[0].path
+      operator: isArray
+    - expression: res.body.errors[0].path
+      operator: length
+      value: "1"
+    - expression: res.body.errors[0].path[0]
+      operator: eq
+      value: create
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

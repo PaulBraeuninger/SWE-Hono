@@ -1,0 +1,59 @@
+info:
+  name: New Member
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "username": "galaxy_devron",
+        "first_name": "Dennis",
+        "last_name": "Braun",
+        "gender": "M",
+        "date_of_birth": "2000-01-01",
+        "member_since": "2024-01-01",
+        "email_address": "galaxy_devron@example.com",
+        "is_student": false,
+        "interests": ["F", "S"],
+        "address": {
+          "postal_code": "76131",
+          "place": "Karlsruhe"
+          },
+        "books": [
+          {
+            "name": "Dune",
+            "isbn": "978-0-59-333302-0",
+            "author": "Frank Herbert",
+            "still_borrowed": false,
+            "genre": "S"
+          }
+        ]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.headers.location
+      operator: matches
+      value: \/rest\/[1-9]\d*$
+    - expression: res.body
+      operator: isString
+    - expression: res.body      
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

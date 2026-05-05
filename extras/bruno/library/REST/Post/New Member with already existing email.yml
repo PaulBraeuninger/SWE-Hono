@@ -1,0 +1,57 @@
+info:
+  name: New Member with already existing email
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "username": "identity_fraud",
+        "first_name": "Paul",
+        "last_name": "Breuninger",
+        "gender": "M",
+        "date_of_birth": "2004-04-08",
+        "member_since": "2024-01-01",
+        "email_address": "paul.braeuninger@example.com",
+        "is_student": true,
+        "interests": ["F", "S"],
+        "address": {
+          "postal_code": "76185",
+          "place": "Karlsruhe"
+          },
+        "books": [
+          {
+            "name": "Dune",
+            "isbn": "978-0-59-333302-0",
+            "author": "Frank Herbert",
+            "still_borrowed": false,
+            "genre": "S"
+          }
+        ]
+      }
+  auth: 
+    type: bearer
+    token: "{{TOKEN}}"
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.body.detail
+      operator: contains
+      value: Email
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
