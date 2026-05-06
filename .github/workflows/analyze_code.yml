@@ -1,0 +1,29 @@
+name: Code Analysis Workflow
+
+on:
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install Bun
+        uses: oven-sh/install-bun@v1
+        with:
+          version: 'latest'
+      
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run ESLint
+        run: bun run lint
+
+      - name: Run Prettier
+        run: bun run format --check
