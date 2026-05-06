@@ -31,19 +31,19 @@
     "Typedoc"
   ],
   "license": "GPL-3.0",
-  "author": "Juergen Zimmermann <Juergen.Zimmermann@h-ka.de> (https://www.h-ka.de)",
+  "author": "Paul Bräuninger <brpa1033@h-ka.de>, Ole Menke <meol1013@h-ka.de>",
   "type": "module",
   "scripts": {
     "start": "bun src/index.mts",
     "test": "vitest",
     "asciidoctor": "node scripts/asciidoctor.mts",
     "dev": "bun --watch src/index.mts",
-    "eslint": "eslint --concurrency auto src test package.json",
+    "eslint": "eslint --concurrency auto src package.json",
     "hello": "bun --watch src/index-hello.mts",
     "k6": "k6 run test\\lasttest\\script.ts",
     "leasot": "leasot --exit-nicely src/**/*.mts",
-    "prettier": "prettier -w  \"src/**/*.mts\" \"test/**/*.ts\" \"package.json\"",
-    "prettier:check": "prettier --cache --check \"src/**/*.mts\" \"test/**/*.ts\" \"package.json\"",
+    "prettier": "prettier -w  \"src/**/*.mts\" \"package.json\"",
+    "prettier:check": "prettier --cache --check \"src/**/*.mts\" \"package.json\"",
     "sonar": "bun scripts/sonar-scanner.mts",
     "tsc": "tsc --pretty",
     "tsgo": "tsgo --stableTypeOrdering"
