@@ -1,17 +1,4 @@
-// Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
 
 import { Hono, type Context, type Next } from 'hono';
 import { compress } from 'hono/compress';
@@ -21,9 +8,9 @@ import { createMiddleware } from 'hono/factory';
 import { secureHeaders } from 'hono/secure-headers';
 import { type ZodError } from 'zod';
 import { router as healthRouter } from './admin/health-router.mts';
-import { graphqlApp } from './buch/graphql/graphql-app.mts';
-import { router } from './buch/router/buch-router.mts';
-import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
+import { graphqlApp } from './library/graphql/graphql-app.mts';
+import { router as memberReadRouter } from './library/router/member-read-router.mts';
+import { router as memberWriteRouter } from './buch/router/member-write-router.mts';
 import {
     IsbnExistsError,
     NotFoundError,
@@ -50,8 +37,8 @@ import { router as authRouter } from './security/auth-router.mts';
 import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 
 /**
- * Web-Applikation mit Hono.
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
+ * Web-Application with Hono.
+ * @author brpa1033
  */
 export const app = new Hono();
 
@@ -60,23 +47,12 @@ const logger = getLogger('app', 'file');
 // -----------------------------------------------------------------------------
 // M i d d l e w a r e
 // -----------------------------------------------------------------------------
-
-// Globale Middleware muss vor den Routen registriert werden
-// https://hono.dev/docs/guides/middleware#execution-order
-
-// Zusaetzliche Security-Header
 const securityHeaders = createMiddleware(async (c: Context, next: Next) => {
     c.header('X-Content-Type-Options', 'nosniff');
-    // siehe CORS
     c.header('X-Frame-Options', 'SAMEORIGIN');
     await next();
 });
-
-// https://hono.dev/docs/middleware/builtin/secure-headers
-// https://hono.dev/docs/middleware/builtin/cors
-// https://hono.dev/docs/middleware/builtin/compress
 app.use(secureHeaders(), cors(corsOptions), securityHeaders, compress());
-
 app.use(trackMetrics);
 
 if (logger.isLevelEnabled('debug')) {
@@ -84,13 +60,12 @@ if (logger.isLevelEnabled('debug')) {
 }
 
 // -----------------------------------------------------------------------------
-// R o u t e n
+// R o u t e s
 // -----------------------------------------------------------------------------
-app.route(paths.rest, router);
-app.route(paths.rest, buchWriteRouter);
+app.route(paths.rest, memberReadRouter);
+app.route(paths.rest, memberWriteRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
-// Yoga baut eine Hono-App mit Basispfad "/graphql"
 app.route('/', graphqlApp);
 app.route('/prometheus', prometheusRouter);
 
@@ -108,7 +83,7 @@ if (logger.isLevelEnabled('debug')) {
 // -----------------------------------------------------------------------------
 // E r r o r   H a n d l e r
 // -----------------------------------------------------------------------------
-// https://hono.dev/docs/api/exception#handling-httpexceptions
+// TODO needs revison
 app.onError((error, c) => {
     if (error instanceof NotFoundError) {
         // https://hono.dev/docs/api/context#notfound
@@ -121,10 +96,6 @@ app.onError((error, c) => {
             unprocessableContent,
             (error as ZodError).issues,
         );
-    }
-
-    if (error instanceof IsbnExistsError) {
-        return createProblemDetails(c, unprocessableContent, error.message);
     }
 
     if (
