@@ -1,9 +1,6 @@
 // TODO short term fix; needs revision:
 /* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Hono, type Context, type Next } from 'hono';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';
