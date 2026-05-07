@@ -79,6 +79,47 @@ export class MemberWriteService {
     }
 
     /**
+     * Updates a member with the given data. The update is only successful if the version of the member is up to date,
+     * otherwise the update fails and NaN is returned.
+     *
+     * @param param0 The object, that holds the ID, th member data and the version string of the member.
+     * @returns The version of the updated member, or NaN if the update failed.
+     */
+    async update({ id, member, version }: UpdateParameters) {
+        this.#logger.debug(
+            'update: Updating member with ID: %s, member: %o, version: %s',
+            id,
+            member,
+            version,
+        );
+        if (id === undefined) {
+            this.#logger.debug('update: ID is undefined, cannot update member');
+            // FIXME: create custom error class for this case
+            throw new Error('ID is undefined');
+        }
+
+        this.#validateUpdate(id, version);
+
+        member.version = { increment: 1 };
+        let memberUpdated: MemberUpdated | undefined;
+        await prismaClient.$transaction(async (prisma) => {
+            memberUpdated = await prisma.member.update({
+                where: {
+                    id,
+                    version: Number(version),
+                },
+                data: member,
+            });
+        });
+        this.#logger.debug(
+            'update: Update member with data %s',
+            JSON.stringify(memberUpdated),
+        );
+
+        return memberUpdated?.version ?? Number.NaN;
+    }
+
+    /**
      * Validates the creation of a new member by checking if a member with the same username already exists.
      *
      * @param param0 The object, that holds the username to be checked.
@@ -126,5 +167,35 @@ export class MemberWriteService {
         const subject = `New member with ID: ${id}`;
         const body = `The member with username <strong>${username}</strong> has been created.`;
         await sendmail({ subject, body });
+    }
+
+    /**
+     * Validates the update of a member by checking if the version is valid and if the member with the given ID exists.
+     *
+     * @param id The ID of the member, tha should be updated.
+     * @param versionStr The version of the member, that should be updated, as string.
+     */
+    async #validateUpdate(id: number, versionStr: string) {
+        this.#logger.debug(
+            '#validateUpdate: Validating member update with ID: %s, version: %s',
+            id,
+            versionStr,
+        );
+        if (!MemberWriteService.VERSION_PATTERN.test(versionStr)) {
+            // TODO: create custom error class for this case
+        }
+
+        const version = Number.parseInt(versionStr.slice(1, -1), 10);
+        // FIXME: check if member with id exists
+        const memberDB = { version: 0 };
+
+        if (version < memberDB.version) {
+            this.#logger.debug(
+                '#validateUpdate: Version %s is outdated, current version is %s',
+                version,
+                memberDB.version,
+            );
+            // TODO: create custom error class for this case
+        }
     }
 }
