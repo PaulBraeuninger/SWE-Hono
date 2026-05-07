@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 
 /**
  * Module consists of router for Liveness and Readiness.
- * 
+ *
  * @packageDocumentation
  * @author brpa1033
  */

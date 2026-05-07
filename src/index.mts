@@ -28,7 +28,6 @@ Bun.serve({
     },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 await banner();
 
 // https://bun.com/docs/guides/process/os-signals
