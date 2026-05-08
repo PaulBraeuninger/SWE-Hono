@@ -46,14 +46,14 @@ export class VersionInvalidError extends Error {
  * Thrown, when a given version stringis outdated.
  */
 export class VersionOutdatedError extends Error {
-    readonly version: string | undefined;
+    readonly version: number;
 
     /**
      * The constructor of the `VersionOutdatedError` class.
      *
      * @param version The version string.
      */
-    constructor(version: string | undefined) {
+    constructor(version: number) {
         super(`Version ${version} is outdated`);
         this.version = version;
     }
