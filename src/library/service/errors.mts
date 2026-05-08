@@ -11,7 +11,7 @@ export class NotFoundError extends Error {}
 /**
  * Thrown, when a given username already exists.
  */
-export class usernameAlreadyExistsError extends Error {
+export class UsernameAlreadyExistsError extends Error {
     readonly username: string;
 
     /**
