@@ -8,6 +8,12 @@ import { type Prisma } from '../../generated/prisma/client.ts';
 import { getLogger } from '../../logger/logger.mts';
 import { sendmail } from '../../mail/sendmail.mts';
 import { MemberReadService } from './member-read-service.mts';
+import {
+    NotFoundError,
+    UsernameAlreadyExistsError,
+    VersionInvalidError,
+    VersionOutdatedError,
+} from './errors.mts';
 
 export type MemberCreate = Prisma.MemberCreateInput;
 type MemberCreated = Prisma.MemberGetPayload<{
@@ -94,8 +100,7 @@ export class MemberWriteService {
         );
         if (id === undefined) {
             this.#logger.debug('update: ID is undefined, cannot update member');
-            // FIXME: create custom error class for this case
-            throw new Error('ID is undefined');
+            throw new NotFoundError();
         }
 
         this.#validateUpdate(id, version);
@@ -147,7 +152,7 @@ export class MemberWriteService {
                 '#validateCreate: Member with username %s already exists',
                 username,
             );
-            // TODO: create custom error class for this case
+            throw new UsernameAlreadyExistsError(username);
         }
         this.#logger.debug('#validateCreate: ok');
     }
@@ -182,7 +187,7 @@ export class MemberWriteService {
             versionStr,
         );
         if (!MemberWriteService.VERSION_PATTERN.test(versionStr)) {
-            // TODO: create custom error class for this case
+            throw new VersionInvalidError(versionStr);
         }
 
         const version = Number.parseInt(versionStr.slice(1, -1), 10);
@@ -195,7 +200,7 @@ export class MemberWriteService {
                 version,
                 memberDB.version,
             );
-            // TODO: create custom error class for this case
+            throw new VersionOutdatedError(version);
         }
     }
 }
