@@ -2,7 +2,7 @@ name: Code Analysis Workflow
 
 on:
   push:
-    branches: [development]
+    branches: [development, ci/cd]
   pull_request:
     branches: [development]
 
