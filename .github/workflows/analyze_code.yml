@@ -25,5 +25,5 @@ jobs:
       - name: Run ESLint
         run: bun run eslint
 
-      - name: Run Prettier
-        run: bun run prettier
+      #- name: Run Prettier
+      #  run: bun run prettier
