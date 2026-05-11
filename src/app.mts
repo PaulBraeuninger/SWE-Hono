@@ -1,5 +1,3 @@
-
-
 import { Hono, type Context, type Next } from 'hono';
 import { compress } from 'hono/compress';
 import { cors } from 'hono/cors';

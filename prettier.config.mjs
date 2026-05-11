@@ -15,9 +15,7 @@
 
 // https://prettier.io/docs/configuration
 
-import { type Config } from 'prettier';
-
-const config: Config = {
+const config = {
     // https://prettier.io/blog/2025/06/23/3.6.0#javascript
     // OXC = A fast JavaScript and TypeScript parser in Rust https://oxc.rs
     plugins: ['@prettier/plugin-oxc'],
