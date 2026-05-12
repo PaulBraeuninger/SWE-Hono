@@ -18,7 +18,7 @@
 const config = {
     // https://prettier.io/blog/2025/06/23/3.6.0#javascript
     // OXC = A fast JavaScript and TypeScript parser in Rust https://oxc.rs
-    plugins: ['@prettier/plugin-oxc'],
+    // plugins: ['@prettier/plugin-oxc'],
 
     // https://github.com/prettier/prettier/issues/4102
     // https://github.com/prettier/prettier/pull/7466
