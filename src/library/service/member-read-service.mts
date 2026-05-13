@@ -196,16 +196,4 @@ export class MemberReadService {
         
         return typeof gender === 'undefined' || isValidGender(gender);
     }
-
-    // TODO Delete this method
-    /**
-     * Example method for getting a simple string response.
-     *
-     * @returns 'Hello World'
-     */
-    async getHelloWorld(): Promise<string> {
-        this.#logger.info('getHelloWorld called');
-
-        return 'Hello World';
-    }
 }
