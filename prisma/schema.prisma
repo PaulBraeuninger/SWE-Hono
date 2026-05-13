@@ -50,7 +50,7 @@ model Member {
   memberSince   DateTime? @db.Date @map("member_since")
   isStudent     Boolean   @default(false) @map("is_student")
   emailAddress  String    @unique @map("email_address")
-  interests     Json?
+  interests     Genre[]
   version       Int       @default(0)
   generated     DateTime  @default(now()) @db.Timestamp(6)
   updated       DateTime  @default(now()) @db.Timestamp(6) @updatedAt
