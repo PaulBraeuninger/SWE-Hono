@@ -57,12 +57,12 @@ export class MemberReadService {
 
         if (!member) {
             this.#logger.debug(`Member with id ${id} not found`);
-            throw new Error(`Member with id ${id} not found`);
+            throw new Error(`Member with id=${id} not found`);
         }
 
         member.interests ??= [];
 
-        this.#logger.debug(`findById: member=${JSON.stringify(member)}`);
+        this.#logger.debug('findById: member=%o', member);
         return member;
     }
 
