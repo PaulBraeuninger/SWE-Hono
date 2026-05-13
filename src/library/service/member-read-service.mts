@@ -69,7 +69,7 @@ export class MemberReadService {
     // TODO Delete this method
     /**
      * Example method for getting a simple string response.
-     * 
+     *
      * @returns 'Hello World'
      */
     async getHelloWorld(): Promise<string> {
@@ -77,5 +77,4 @@ export class MemberReadService {
 
         return 'Hello World';
     }
-
 }

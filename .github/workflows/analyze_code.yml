@@ -2,7 +2,7 @@ name: Code Analysis Workflow
 
 on:
   push:
-    branches: [development]
+    branches: [development, ci/cd]
   pull_request:
     branches: [development]
 
@@ -25,5 +25,11 @@ jobs:
       - name: Run ESLint
         run: bun run eslint
 
-      #- name: Run Prettier
-      #  run: bun run prettier
+      - name: Run Prettier
+        run: bun run prettier
+      
+      - name: Generate Prisma Client
+        run: bun run prisma generate
+      
+      - name: Run TypeScript Compiler
+        run: bun run tsc

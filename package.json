@@ -45,7 +45,7 @@
     "prettier": "prettier -w  \"src/**/*.mts\" \"package.json\"",
     "prettier:check": "prettier --cache --check \"src/**/*.mts\" \"package.json\"",
     "sonar": "bun scripts/sonar-scanner.mts",
-    "tsc": "tsc --pretty",
+    "tsc": "tsc --pretty --noemit",
     "tsgo": "tsgo --stableTypeOrdering"
   },
   "overrides": {
