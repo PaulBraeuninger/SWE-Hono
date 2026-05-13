@@ -12,7 +12,7 @@ const { memberReadService } = container;
 
 /**
  * Router for reading operations for library members.
- * 
+ *
  * @author brpa1033
  */
 export const router = new Hono();
@@ -23,7 +23,5 @@ router.get('/', async (c) => {
 
     const message = await memberReadService.getHelloWorld();
 
-    return c.json(
-        { message },
-    );
+    return c.json({ message });
 });

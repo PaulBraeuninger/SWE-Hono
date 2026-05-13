@@ -4,16 +4,14 @@
  * @author brpa1033
  */
 
-import { prismaClient } from '../../config/prisma-client.mts';
 import { getLogger } from '../../logger/logger.mts';
 
 export class MemberReadService {
-
     readonly #logger = getLogger(MemberReadService.name);
 
     /**
      * Example method for getting a simple string response.
-     * 
+     *
      * @returns 'Hello World'
      */
     async getHelloWorld(): Promise<string> {
@@ -21,5 +19,4 @@ export class MemberReadService {
 
         return 'Hello World';
     }
-
 }
