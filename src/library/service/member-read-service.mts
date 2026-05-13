@@ -48,6 +48,12 @@ export class MemberReadService {
 
     readonly #logger = getLogger(MemberReadService.name);
 
+    /**
+     * Finds a member by their ID.
+     * @param id - The ID of the member to find.
+     * @param includeBooks - Whether to include the member's books in the response.
+     * @returns The member with the specified ID, including their address and optionally their books.
+     */
     async findById({
         id, 
         includeBooks
@@ -71,6 +77,12 @@ export class MemberReadService {
         return member;
     }
 
+    /**
+     * Finds members based on the provided search parameters and pagination information.
+     * @param searchparameter - The search parameters to filter members by.
+     * @param pageable - The pagination information for the query.
+     * @returns A slice of members that match the search parameters and pagination information.
+     */
     async find(
         searchparameter: SearchParameter | null,
         pageable: Pageable,
@@ -113,6 +125,11 @@ export class MemberReadService {
         return this.#createSlice(members, totalElements);
     }
 
+    /**
+     * Counts the number of members that match the provided `where` clause.
+     * @param where - The `where` clause to filter members by.
+     * @returns The number of members that match the provided `where` clause.
+     */
     async count(where? : Prisma.MemberWhereInput) {
         this.#logger.debug('count: where=%o', where ?? 'undefined');
         const { count } = prismaClient.member;
