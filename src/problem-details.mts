@@ -37,8 +37,6 @@ export type ProblemDetails = {
  * @param statusCode HTTP-Statuscode
  * @param detail
  * @returns Response gemäß Fetch-API von ES 2015
- *
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const createProblemDetails = (
     ctx: Context,

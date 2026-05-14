@@ -1,22 +1,7 @@
-// Copyright (C) 2021 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 /**
- * Das Modul besteht aus der Funktion {@linkcode getLogger} für einen Logger auf
- * der Basis von Pino: https://getpino.io.
- * Alternativen: Winston oder evtl. Bunyan
+ * This module provides the {@linkcode getLogger} function for creating a logger
+ * based on Pino: https://getpino.io.
+ * Alternatives: Winston or possibly Bunyan.
  * @packageDocumentation
  */
 
@@ -24,20 +9,17 @@ import type pino from 'pino';
 import { parentLogger } from '../config/logger.mts';
 
 /**
- * Eine Funktion, um ein Logger-Objekt von `Pino` zu erzeugen, so dass ein
- * _Kontext_ definiert wird, der bei jeder Log-Methode verwendet wird und z.B.
- * der Name einer eigenen Klasse (Default), einer Funktion oder einer Datei ist.
- * @param context Der Kontext
- * @param kind i.a. `class`, `func` oder `file`
- *
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
+ * Creates a `Pino` logger object with a defined _context_ that is used in each
+ * log method, e.g. the name of a class (default), a function, or a file.
+ * @param context The context
+ * @param kind Usually `class`, `func`, or `file`
  */
 export const getLogger: (
     context: string,
     kind?: string,
 ) => pino.Logger<string> = (context: string, kind = 'class') => {
     const bindings: Record<string, string> = {};
-    // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
+    // Indexed access for a property whose name is passed via "kind".
     // eslint-disable-next-line security/detect-object-injection
     bindings[kind] = context;
     // https://getpino.io/#/docs/child-loggers

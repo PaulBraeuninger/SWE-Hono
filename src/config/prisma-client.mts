@@ -70,13 +70,11 @@ if (logger.isLevelEnabled('debug')) {
 
 /**
  * PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env".
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const prismaClient = tmpClient;
 
 /**
  * Prisma-Client mit der DB verbinden.
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const connectDB = async () => {
     await prismaClient.$connect();
@@ -85,7 +83,6 @@ export const connectDB = async () => {
 
 /**
  * DB-Verbindung für den Prisma-Client trennen.
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const disconnectDB = async () => {
     await prismaClient.$disconnect();
