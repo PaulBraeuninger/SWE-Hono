@@ -408,6 +408,8 @@ export default defineConfig(
             '@stylistic/operator-linebreak': 'off',
             '@stylistic/quote-props': ['error', 'as-needed'],
             '@stylistic/semi': ['error', 'always'],
+            '@stylistic/spaced-comment': 'off',
+            'sonarjs/no-commented-code': 'off',
         },
     },
 
