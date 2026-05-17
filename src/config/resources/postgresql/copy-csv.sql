@@ -19,5 +19,5 @@ SET search_path TO library;
 
 -- https://www.postgresql.org/docs/current/sql-copy.html
 COPY member FROM '/init/library/csv/member.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY titel FROM '/init/library/csv/book.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY abbildung FROM '/init/library/csv/address.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY address FROM '/init/library/csv/address.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY book FROM '/init/library/csv/book.csv' (FORMAT csv, DELIMITER ';', HEADER true);
