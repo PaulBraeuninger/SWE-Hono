@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { MemberReadService } from './library/service/member-read-service.mts';
-// import { MemberWriteService } from './library/service/member-write-service.mts';
+import { MemberWriteService } from './library/service/member-write-service.mts';
 import { DbPopulateService } from './config/dev/db-populate.mts';
 import { KeycloakService } from './security/keycloak-service.mts';
 
@@ -17,7 +17,7 @@ const memberReadService = new MemberReadService();
  */
 export const container = {
     memberReadService,
-    // memberWriteService: new MemberWriteService(memberReadService),
+    memberWriteService: new MemberWriteService(memberReadService),
     keycloakService: new KeycloakService(),
     dbPopulateService: new DbPopulateService(),
 };

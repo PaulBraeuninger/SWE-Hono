@@ -28,7 +28,7 @@ export class TokenData {
 export const router = new Hono();
 
 router.post(paths.token, async (c) => {
-    const body: Record<string, string> = await c.req.parseBody();
+    const body: Record<string, string> = await c.req.json();
     const username = body['username'];
     const password = body['password'];
     logger.debug('post: username=%s', username);

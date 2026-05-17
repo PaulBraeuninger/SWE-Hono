@@ -7,16 +7,16 @@ import { cors } from 'hono/cors';
 import { showRoutes } from 'hono/dev';
 import { createMiddleware } from 'hono/factory';
 import { secureHeaders } from 'hono/secure-headers';
-// import { type ZodError } from 'zod';
+import { type ZodError } from 'zod';
 import { router as healthRouter } from './admin/health-router.mts';
 // import { graphqlApp } from './library/graphql/graphql-app.mts';
 import { router as memberReadRouter } from './library/router/member-read-router.mts';
-// import { router as memberWriteRouter } from './library/router/member-write-router.mts';
-// import {
-//     NotFoundError,
-//     VersionInvalidError,
-//     VersionOutdatedError,
-// } from './library/service/errors.mts';
+import { router as memberWriteRouter } from './library/router/member-write-router.mts';
+import {
+    NotFoundError,
+    VersionInvalidError,
+    VersionOutdatedError,
+} from './library/service/errors.mts';
 import { corsOptions } from './config/cors.mts';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { env } from './config/env.mts';
@@ -26,15 +26,15 @@ import { requestLogger } from './logger/request-logger.mts';
 import { responseTime } from './logger/response-time.mts';
 import { trackMetrics } from './monitoring/prometheus-metrics.mts';
 import { router as prometheusRouter } from './monitoring/prometheus-router.mts';
-// import {
-//     createProblemDetails,
-//     forbidden,
-//     preconditionFailed,
-//     unauthorized,
-//     unprocessableContent,
-// } from './problem-details.mts';
+import {
+    createProblemDetails,
+    forbidden,
+    preconditionFailed,
+    unauthorized,
+    unprocessableContent,
+} from './problem-details.mts';
 import { router as authRouter } from './security/auth-router.mts';
-// import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
+import { ForbiddenError, UnauthorizedError } from './security/errors.mts';
 
 /**
  * Web-Application with Hono.
@@ -63,7 +63,7 @@ if (logger.isLevelEnabled('debug')) {
 // R o u t e s
 // -----------------------------------------------------------------------------
 app.route(paths.rest, memberReadRouter);
-// app.route(paths.rest, memberWriteRouter);
+app.route(paths.rest, memberWriteRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
 // app.route('/', graphqlApp);
@@ -84,37 +84,36 @@ if (logger.isLevelEnabled('debug')) {
 // E r r o r   H a n d l e r
 // -----------------------------------------------------------------------------
 // TODO needs revison
-// app.onError((error, c) => {
-//     if (error instanceof NotFoundError) {
-//         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-//         return c.notFound() as Response;
-//     }
-//
-//     if (error.name === 'ZodError') {
-//         return createProblemDetails(
-//             c,
-//             unprocessableContent,
-//             (error as ZodError).issues,
-//         );
-//     }
-//
-//     if (
-//         error instanceof VersionInvalidError ||
-//         error instanceof VersionOutdatedError
-//     ) {
-//         return createProblemDetails(c, preconditionFailed, error.message);
-//     }
-//
-//     if (error instanceof UnauthorizedError) {
-//         return createProblemDetails(c, unauthorized, error.message);
-//     }
-//
-//     if (error instanceof ForbiddenError) {
-//         return createProblemDetails(c, forbidden, error.message);
-//     }
-//
-//     logger.error('Interner Fehler: %o', error);
-//     console.log(error.stack);
-//     return c.body('Interner Fehler', 500); // eslint-disable-line @typescript-eslint/no-magic-numbers
-// });
-//
+app.onError((error, c) => {
+    if (error instanceof NotFoundError) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        return c.notFound() as Response;
+    }
+
+    if (error.name === 'ZodError') {
+        return createProblemDetails(
+            c,
+            unprocessableContent,
+            (error as ZodError).issues,
+        );
+    }
+
+    if (
+        error instanceof VersionInvalidError ||
+        error instanceof VersionOutdatedError
+    ) {
+        return createProblemDetails(c, preconditionFailed, error.message);
+    }
+
+    if (error instanceof UnauthorizedError) {
+        return createProblemDetails(c, unauthorized, error.message);
+    }
+
+    if (error instanceof ForbiddenError) {
+        return createProblemDetails(c, forbidden, error.message);
+    }
+
+    logger.error('Interner Fehler: %o', error);
+    console.log(error.stack);
+    return c.body('Interner Fehler', 500); // eslint-disable-line @typescript-eslint/no-magic-numbers
+});
