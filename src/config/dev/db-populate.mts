@@ -92,11 +92,11 @@ export class DbPopulateService {
 
         // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
         // https://www.postgresql.org/docs/current/sql-copy.html
-        await this.#prismaAdmin.$connect();
-        await this.#prismaAdmin.$transaction(async (tx) => {
-            await tx.$executeRawUnsafe(copyStatements);
-        });
-        await this.#prismaAdmin.$disconnect();
+        // await this.#prismaAdmin.$connect();
+        // await this.#prismaAdmin.$transaction(async (tx) => {
+        //     await tx.$executeRawUnsafe(copyStatements);
+        // });
+        // await this.#prismaAdmin.$disconnect();
     }
 }
 /* eslint-enable @stylistic/quotes */
