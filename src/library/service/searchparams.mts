@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import { Gender, Genre } from '../../generated/prisma/enums.ts';
+import { Gender } from '../../generated/prisma/enums.ts';
 
 export type SearchParameter = {
     readonly username?: string;
@@ -16,7 +16,11 @@ export type SearchParameter = {
     readonly dateOfBirth?: string;
     readonly memberSince?: string;
     readonly isStudent?: boolean;
-    readonly interests?: Genre[]; // TODO Revision: Does this work?
+    readonly fantasy?: string;
+    readonly thriller?: string;
+    readonly scienceFiction?: string;
+    readonly crimeNovel?: string;
+    readonly nonFiction?: string;
 };
 
 export const searchParameterNames = [
@@ -31,10 +35,18 @@ export const searchParameterNames = [
     'interests',
 ];
 
+const genre_keys = [
+    'fantasy',
+    'thriller',
+    'scienceFiction',
+    'crimeNovel',
+    'nonFiction',
+]
+
 export const isValidGenre = (value: unknown): boolean => {
     return (
         typeof value === 'string' &&
-        Object.values(Genre).includes(value as Genre)
+        Object.values(genre_keys).includes(value)
     );
 };
 

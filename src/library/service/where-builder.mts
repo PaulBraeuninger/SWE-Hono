@@ -3,11 +3,44 @@
  * which is responsible for building the `where` clause for Prisma queries based on the provided search parameters.
  * @packageDocumentation
  */
-
 import { Gender } from '../../generated/prisma/enums.ts';
 import { MemberWhereInput } from '../../generated/prisma/models.ts';
 import { getLogger } from '../../logger/logger.mts';
 import { SearchParameter } from './searchparams.mts';
+
+const buildInterests = ({
+    fantasy,
+    thriller,
+    scienceFiction,
+    crimeNovel,
+    nonFiction,
+}: {
+    fantasy: string | undefined;
+    thriller: string | undefined;
+    scienceFiction: string | undefined;
+    crimeNovel: string | undefined;
+    nonFiction: string | undefined;
+}): ReadonlyArray<string> => {
+    const interests: string[] = [];
+
+    if (fantasy?.toLowerCase() === 'true') {
+        interests.push('FANTASY');
+    }
+    if (thriller?.toLowerCase() === 'true') {
+        interests.push('THRILLER');
+    }
+    if (scienceFiction?.toLowerCase() === 'true') {
+        interests.push('SCIENCE_FICTION');
+    }
+    if (crimeNovel?.toLowerCase() === 'true') {
+        interests.push('CRIME_NOVEL');
+    }
+    if (nonFiction?.toLowerCase() === 'true') {
+        interests.push('NON_FICTION');
+    }
+
+    return interests;
+};
 
 export type BuildIDParams = {
     readonly id: number;
@@ -21,12 +54,21 @@ const logger = getLogger('buildWhere', 'func');
  * @param searchparams - The search parameters to build the `where` clause from.
  * @returns The `where` clause for Prisma queries.
  */
-export const buildWhere = ({ ...searchparams }: SearchParameter) => {
-    logger.debug('buildWhere: searchparams=%o', searchparams);
+export const buildWhere = ({
+        fantasy,
+        thriller,
+        scienceFiction,
+        crimeNovel,
+        nonFiction,
+        ...restProperties
+    }: SearchParameter) => {
+
+    logger.debug('buildWhere: fantasy=%s, thriller=%s, scienceFiction=%s, crimeNovel=%s, nonFiction=%s, restProperties=%o',
+        fantasy, thriller, scienceFiction, crimeNovel, nonFiction, restProperties);
 
     const where: MemberWhereInput = {};
 
-    Object.entries(searchparams).forEach(([key, value]) => {
+    Object.entries(restProperties).forEach(([key, value]) => {
         switch (key) {
             case 'username':
                 where.username = { equals: value as string };
@@ -52,15 +94,21 @@ export const buildWhere = ({ ...searchparams }: SearchParameter) => {
             case 'isStudent':
                 where.isStudent = { equals: value as boolean };
                 break;
-            case 'interests': // TODO Revision: Does this work?
-                if (Array.isArray(value) && value.length > 0) {
-                    where.interests = {
-                        hasSome: value,
-                    };
-                }
-                break;
         }
     });
+
+    const interests = buildInterests({
+        fantasy,
+        thriller,
+        scienceFiction,
+        crimeNovel,
+        nonFiction,
+    });
+
+    if (interests.length > 0) {
+        where.interests = { array_contains: interests };
+    }
+
     logger.debug('buildWhere: where=%o', where);
 
     return where;

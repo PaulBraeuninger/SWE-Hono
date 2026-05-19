@@ -198,8 +198,8 @@ export class MemberReadService {
             }
         });
 
-        if (!isValid && this.#checkGender(searchparameter)) {
-            isValid = true;
+        if (!isValid) {
+            isValid = this.#checkGender(searchparameter);
         }
 
         return isValid;
