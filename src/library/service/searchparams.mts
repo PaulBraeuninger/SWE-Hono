@@ -1,7 +1,7 @@
 /**
- * This module defines the SearchParameter type, which represents the search parameters for 
+ * This module defines the SearchParameter type, which represents the search parameters for
  * finding members in the library system.
- * 
+ *
  * @packageDocumentation
  */
 
@@ -17,7 +17,7 @@ export type SearchParameter = {
     readonly memberSince?: string;
     readonly isStudent?: boolean;
     readonly interests?: Genre[]; // TODO Revision: Does this work?
-}
+};
 
 export const searchParameterNames = [
     'username',
@@ -29,18 +29,18 @@ export const searchParameterNames = [
     'memberSince',
     'isStudent',
     'interests',
-]
+];
 
 export const isValidGenre = (value: unknown): boolean => {
     return (
-        typeof value === "string" &&
+        typeof value === 'string' &&
         Object.values(Genre).includes(value as Genre)
     );
-}
+};
 
 export const isValidGender = (value: unknown): boolean => {
     return (
-        typeof value === "string" &&
+        typeof value === 'string' &&
         Object.values(Gender).includes(value as Gender)
     );
-}
+};

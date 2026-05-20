@@ -27,7 +27,7 @@ runtime:
       operator: isString
     - expression: res.body
       operator: isEmpty
-  
+
 settings:
   encodeUrl: true
   timeout: 0

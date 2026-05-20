@@ -17,7 +17,7 @@ request:
       password: "{{password}}"
     tokenConfig:
       id: credentials
-      placement: 
+      placement:
         header: Bearer
       settings:
         autoFetchToken: true
