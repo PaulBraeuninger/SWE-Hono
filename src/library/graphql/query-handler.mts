@@ -1,3 +1,9 @@
+/**
+ * Query handlers for GraphQL resolvers.
+ *
+ * @packageDocumentation
+ */
+
 import { GraphQLError } from "graphql";
 import { container } from "../../container.mts";
 import { getLogger } from "../../logger/logger.mts";
@@ -9,6 +15,15 @@ import { Slice } from "../service/slice.mts";
 
 const logger = getLogger('graphql-query-handler', 'file');
 
+/**
+ * Handles the GraphQL query for fetching a member by ID. It retrieves the member from the database
+ * and converts it to the GraphQL Member type. If the member is not found, it throws a GraphQLError
+ * with a BAD_USER_INPUT code. For any other errors, it throws a GraphQLError with an INTERNAL_SERVER_ERROR code.
+ *
+ * @param id - The ID of the member to fetch.
+ * @returns The member corresponding to the given ID.
+ * @throws GraphQLError if the member is not found or if there is an internal server error.
+ */
 export const memberHandler = async (id: ID) => {
     logger.debug(`Handling member query for id: ${id}`);
 
@@ -39,6 +54,16 @@ export const memberHandler = async (id: ID) => {
     return member;
 };
 
+/**
+ * Handles the GraphQL query for fetching members using search parameters.
+ * It retrieves the members from the database and converts them to the GraphQL Member type.
+ * If no members are found, it throws a GraphQLError with a BAD_USER_INPUT code.
+ * For any other errors, it throws a GraphQLError with an INTERNAL_SERVER_ERROR code.
+ *
+ * @param input - The search parameters for filtering members.
+ * @returns A list of members matching the search criteria.
+ * @throws GraphQLError if no members are found or if there is an internal server error.
+ */
 export const membersHandler = async (
     input?: SearchParameterInput | undefined,
 ) => {

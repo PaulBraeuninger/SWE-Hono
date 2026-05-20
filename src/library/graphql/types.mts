@@ -1,3 +1,9 @@
+/**
+ * Types and type definitions for GraphQL schema and resolvers.
+ *
+ * @packageDocumentation
+ */
+
 import { MemberWithAddressAndBooks } from "../service/member-read-service.mts";
 import { SearchParameter } from "../service/searchparams.mts";
 
