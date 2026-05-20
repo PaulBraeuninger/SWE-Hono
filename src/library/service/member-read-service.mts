@@ -133,7 +133,7 @@ export class MemberReadService {
     async count(where? : Prisma.MemberWhereInput) {
         this.#logger.debug('count: where=%o', where ?? 'undefined');
         const { count } = prismaClient.member;
-        const number = typeof where === 'undefined' ? await count() : await count({ where });
+        const number = where === undefined ? await count() : await count({ where });
         this.#logger.debug('count: number=%d', number);
         return number;
     }
@@ -194,6 +194,6 @@ export class MemberReadService {
         const { gender } = searchparam;
         this.#logger.debug(`checkGender: gender=%s`, gender ?? 'undefined');
         
-        return typeof gender === 'undefined' || isValidGender(gender);
+        return  gender === undefined || isValidGender(gender);
     }
 }
