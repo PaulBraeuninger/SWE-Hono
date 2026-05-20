@@ -26,7 +26,7 @@ jobs:
         run: bun run eslint
 
       - name: Run Prettier
-        run: bun run prettier --check .
+        run: bun run prettier:check
 
       - name: Generate Prisma Client
         run: bun run prisma generate
