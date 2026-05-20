@@ -39,7 +39,7 @@ router.get('/:id', async (c) => {
         logger.debug('get: id=%s is not a valid number', id);
         return c.notFound();
     }
-    
+
     const member = await memberReadService.findById({ id: idAsNumber });
 
     const ifNonMatch = req.header('If-None-Match');
@@ -83,7 +83,12 @@ router.get('/', async (c) => {
     const { page, size } = queryParams;
     delete queryParams['page'];
     delete queryParams['size'];
-    logger.debug('get: page=%s, size=%s, queryParams=%o', page, size, queryParams);
+    logger.debug(
+        'get: page=%s, size=%s, queryParams=%o',
+        page,
+        size,
+        queryParams,
+    );
 
     const pageable = createPageable({ number: page, size });
     const memberSlice = await memberReadService.find(queryParams, pageable);

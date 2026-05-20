@@ -49,7 +49,7 @@ runtime:
       value: \/rest\/[1-9]\d*$
     - expression: res.body
       operator: isString
-    - expression: res.body      
+    - expression: res.body
       operator: isEmpty
 
 settings:
