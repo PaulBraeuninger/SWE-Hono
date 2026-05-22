@@ -109,10 +109,7 @@ export class MemberWriteService {
         let memberUpdated: MemberUpdated | undefined;
         await prismaClient.$transaction(async (prisma) => {
             memberUpdated = await prisma.member.update({
-                where: {
-                    id,
-                    version: Number(version),
-                },
+                where: { id },
                 data: member,
             });
         });
