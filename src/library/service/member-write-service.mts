@@ -191,8 +191,7 @@ export class MemberWriteService {
         }
 
         const version = Number.parseInt(versionStr.slice(1, -1), 10);
-        // FIXME: check if member with id exists
-        const memberDB = { version: 0 };
+        const memberDB = await this.#memberReadService.findById({ id });
 
         if (version < memberDB.version) {
             this.#logger.debug(
