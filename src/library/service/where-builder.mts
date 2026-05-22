@@ -55,16 +55,22 @@ const logger = getLogger('buildWhere', 'func');
  * @returns The `where` clause for Prisma queries.
  */
 export const buildWhere = ({
+    fantasy,
+    thriller,
+    scienceFiction,
+    crimeNovel,
+    nonFiction,
+    ...restProperties
+}: SearchParameter) => {
+    logger.debug(
+        'buildWhere: fantasy=%s, thriller=%s, scienceFiction=%s, crimeNovel=%s, nonFiction=%s, restProperties=%o',
         fantasy,
         thriller,
         scienceFiction,
         crimeNovel,
         nonFiction,
-        ...restProperties
-    }: SearchParameter) => {
-
-    logger.debug('buildWhere: fantasy=%s, thriller=%s, scienceFiction=%s, crimeNovel=%s, nonFiction=%s, restProperties=%o',
-        fantasy, thriller, scienceFiction, crimeNovel, nonFiction, restProperties);
+        restProperties,
+    );
 
     const where: MemberWhereInput = {};
 

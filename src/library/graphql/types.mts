@@ -4,8 +4,8 @@
  * @packageDocumentation
  */
 
-import { MemberWithAddressAndBooks } from "../service/member-read-service.mts";
-import { SearchParameter } from "../service/searchparams.mts";
+import { MemberWithAddressAndBooks } from '../service/member-read-service.mts';
+import { SearchParameter } from '../service/searchparams.mts';
 
 export type ID = string & { readonly __brand: 'ID' };
 export type Int = number & { readonly __brand: 'Int' };
@@ -15,9 +15,10 @@ export const toID = (value: string | number): ID => {
         return value as ID;
     }
     return value.toString() as ID;
-}
+};
 
-export const toInt = (num: number): Int => (Number.isInteger(num) ? num : Math.round(num)) as Int;
+export const toInt = (num: number): Int =>
+    (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
 
 export const typeDefinitions = `
@@ -134,15 +135,27 @@ export type Member = {
     isStudent?: boolean;
     emailAddress: string;
     interests: string[];
-    address: { id: ID, postalCode: string, place: string };
-    books: ({
-        id: ID,
-        name: string,
-        isbn: string,
-        author: string | null,
-        genre: 'FANTASY' | 'THRILLER' | 'SCIENCE_FICTION' | 'CRIME_NOVEL' | 'NON_FICTION' | null,
-    } | undefined | null)[] | undefined;
-}
+    address: { id: ID; postalCode: string; place: string };
+    books:
+        | (
+              | {
+                    id: ID;
+                    name: string;
+                    isbn: string;
+                    author: string | null;
+                    genre:
+                        | 'FANTASY'
+                        | 'THRILLER'
+                        | 'SCIENCE_FICTION'
+                        | 'CRIME_NOVEL'
+                        | 'NON_FICTION'
+                        | null;
+                }
+              | undefined
+              | null
+          )[]
+        | undefined;
+};
 
 export const toMemberType = (member: MemberWithAddressAndBooks): Member => {
     const result: Member = {
@@ -154,17 +167,17 @@ export const toMemberType = (member: MemberWithAddressAndBooks): Member => {
         emailAddress: member.emailAddress,
         interests: [],
         address: {
-            id: member.address ? toID(member.address.id) : 'N/A' as ID,
+            id: member.address ? toID(member.address.id) : ('N/A' as ID),
             postalCode: member.address?.postalCode ?? 'N/A',
-            place: member.address?.place ?? 'N/A'
+            place: member.address?.place ?? 'N/A',
         },
-        books: member.books.map(book => ({
+        books: member.books.map((book) => ({
             id: toID(book.id),
             name: book.name,
             isbn: book.isbn,
             author: book.author,
-            genre: book.genre
-        }))
+            genre: book.genre,
+        })),
     };
 
     const { gender, dateOfBirth, memberSince, isStudent } = member;
@@ -184,7 +197,7 @@ export const toMemberType = (member: MemberWithAddressAndBooks): Member => {
     //TODO Address/Books optional fields
 
     return result;
-}
+};
 
 export type SearchParameterInput = {
     username?: string;
@@ -195,7 +208,7 @@ export type SearchParameterInput = {
     dateOfBirth?: string;
     memberSince?: string;
     isStudent?: boolean;
-}
+};
 
 export const toSearchParameter = (param?: SearchParameterInput) => {
     if (param === undefined) {
@@ -210,7 +223,7 @@ export const toSearchParameter = (param?: SearchParameterInput) => {
         gender,
         dateOfBirth,
         memberSince,
-        isStudent
+        isStudent,
     } = param;
 
     const searchParam: Record<string, any> = {};

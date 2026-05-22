@@ -41,12 +41,11 @@ const genre_keys = [
     'scienceFiction',
     'crimeNovel',
     'nonFiction',
-]
+];
 
 export const isValidGenre = (value: unknown): boolean => {
     return (
-        typeof value === 'string' &&
-        Object.values(genre_keys).includes(value)
+        typeof value === 'string' && Object.values(genre_keys).includes(value)
     );
 };
 
