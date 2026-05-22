@@ -57,7 +57,7 @@ runtime:
       value: application/json
     - expression: res.body.detail
       operator: isArray
-    - expression: res.body.detail 
+    - expression: res.body.detail
       operator: isNotEmpty
 
 settings:

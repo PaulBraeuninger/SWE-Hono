@@ -38,6 +38,7 @@ abgespeichert.
     cd extras/compose/mailpit
     docker compose up
 ```
+
 ## Netshoot als Mailclient
 
 Zunächst wird in einer 2. PowerShell oder Bash ein Docker Container mit _Netshoot_

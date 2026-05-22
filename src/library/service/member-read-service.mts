@@ -145,9 +145,7 @@ export class MemberReadService {
         this.#logger.debug('count: where=%o', where ?? 'undefined');
         const { count } = prismaClient.member;
         const number =
-            typeof where === 'undefined'
-                ? await count()
-                : await count({ where });
+            where === undefined ? await count() : await count({ where });
         this.#logger.debug('count: number=%d', number);
         return number;
     }
@@ -209,6 +207,6 @@ export class MemberReadService {
         const { gender } = searchparam;
         this.#logger.debug(`checkGender: gender=%s`, gender ?? 'undefined');
 
-        return typeof gender === 'undefined' || isValidGender(gender);
+        return gender === undefined || isValidGender(gender);
     }
 }
