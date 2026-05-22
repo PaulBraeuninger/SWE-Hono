@@ -1,18 +1,3 @@
-// Copyright (C) 2026 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 import { type Context, type HonoRequest, type Next } from 'hono';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { JOSEError } from 'jose/errors';
@@ -31,7 +16,7 @@ type Rolle = 'admin' | 'user';
 const { issuer, jwksUri, clientId, audience } = keycloakConfig;
 const jwks = createRemoteJWKSet(new URL(jwksUri));
 
-// Token aus dem Request Header extrahieren
+// Extract token from the request header.
 const getToken = (req: HonoRequest) => {
     const auth = req.header('Authorization');
     if (!auth?.startsWith('Bearer ')) {
@@ -42,27 +27,27 @@ const getToken = (req: HonoRequest) => {
     return token;
 };
 
-// Base64 in JSON decodieren und verifizieren
+// Decode Base64 to JSON and verify.
 const verifyToken = async (token: string) => {
     try {
         // https://github.com/panva/jose/blob/main/docs/jwt/verify/functions/jwtVerify.md
-        // iat, exp und nbf werden implizit verifiziert
+        // iat, exp, and nbf are verified implicitly.
         return await jwtVerify(token, jwks, {
-            // siehe Properties innerhalb der Payload des Tokens
+            // See properties within the token payload.
             issuer,
             audience,
         });
     } catch (err) {
         logger.debug('verifyToken: verifyResult err=%o', err as object);
         if (err instanceof JOSEError) {
-            // abgeleitet: JWTClaimValidationFailed, JWTExpired, ...
+            // Derived errors: JWTClaimValidationFailed, JWTExpired, ...
             throw new UnauthorizedError('Token nicht (mehr) gueltig');
         }
         throw new InternalServerError();
     }
 };
 
-// Rollen aus der Payload des verifizierten JWTs extrahieren
+// Extract roles from the verified JWT payload.
 // {
 //   "exp": ...,
 //   "iat": ...,
@@ -81,32 +66,32 @@ const getRollen = (payload: any) => {
 };
 
 /**
- * Middleware: mindestens eine der geforderten Rollen muss im Token enthalten sein.
- * Prüft den JWT hinsichtlich Audience, Expiration und Rollen.
- * @param roles Rollen als einzelne String-Argumente
+ * Middleware: at least one required role must be present in the token.
+ * Validates JWT audience, expiration, and roles.
+ * @param roles Roles as individual string arguments
  */
 export const rolesRequired = (...roles: Rolle[]) => {
     // @ts-ignore
     return async (c: Context, next: Next) => {
         const { req } = c;
 
-        // Token aus dem Request Header extrahieren
+        // Extract token from the request header.
         const token = getToken(req);
 
-        // Base64 in JSON decodieren und verifizieren
+        // Decode Base64 to JSON and verify.
         const verifyResult = await verifyToken(token);
         if (verifyResult instanceof Response) {
             return verifyResult;
         }
 
-        // Payload aus dem verifizierten JWT extrahieren
+        // Extract payload from the verified JWT.
         const { payload } = verifyResult;
         logger.debug('rolesRequired: payload=%o', payload);
 
-        // Rollen aus der Payload bei resource_access.CLIENT_ID.roles extrahieren
+        // Extract roles from payload.resource_access.CLIENT_ID.roles.
         const rollenResult = getRollen(payload);
 
-        // Ist eine der erforderlichen Rollen in der Payload vorhanden?
+        // Is one of the required roles present in the payload?
         const rolleVorhanden = roles.some((role) =>
             rollenResult.includes(role),
         );
@@ -114,7 +99,7 @@ export const rolesRequired = (...roles: Rolle[]) => {
             throw new ForbiddenError('Erforderliche Rolle nicht vorhanden');
         }
 
-        // Payload fuer evtl. spaetere Verarbeitung im Request puffern
+        // Store payload on request for potential later processing.
         (req as any).tokenPayload = payload;
 
         await next();

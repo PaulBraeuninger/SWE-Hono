@@ -24,7 +24,6 @@ import { rolesRequired } from '../../security/roles-required.mts';
 
 /**
  * Router für die Entwicklung, z.B. Neuladen der DB.
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const router = new Hono();
 

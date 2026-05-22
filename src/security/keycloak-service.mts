@@ -1,18 +1,3 @@
-// Copyright (C) 2024 - present Juergen Zimmermann, Hochschule Karlsruhe
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 /* eslint-disable camelcase, @typescript-eslint/naming-convention */
 
 import { keycloakConfig } from '../config/keycloak.mts';
@@ -25,7 +10,7 @@ const CONTENT_TYPE = 'Content-Type';
 const X_WWW_FORM_URLENCODED = 'application/x-www-form-urlencoded';
 const POST = 'POST';
 
-/** Typdefinition für Eingabedaten zu einem Token. */
+/** Type definition for token input data. */
 export type TokenData = {
     readonly username: string | undefined;
     readonly password: string | undefined;
@@ -93,7 +78,7 @@ export class KeycloakService {
         return responseBody;
     }
 
-    // Logging der Rollen: wird auf Client-Seite benoetigt
+    // Log roles: required on the client side.
     // { ..., "azp": "nest-client", "exp": ..., "resource_access": { "nest-client": { "roles": ["admin"] } ...}
     // azp = authorized party
     async #logPayload(responseBody: unknown) {
@@ -107,16 +92,16 @@ export class KeycloakService {
         }
         // https://www.keycloak.org/docs-api/latest/rest-api/index.html#ClientInitialAccessCreatePresentation
         const { access_token } = responseBody as { access_token: string };
-        // Payload ist der mittlere Teil zwischen 2 Punkten und mit Base64 codiert
+        // Payload is the middle part between 2 dots and encoded in Base64.
         const [, payloadStr] = access_token.split('.');
 
-        // Base64 decodieren
+        // Decode Base64.
         if (payloadStr === undefined) {
             return;
         }
         const payloadDecoded = atob(payloadStr);
 
-        // JSON-Objekt fuer Payload aus dem decodierten String herstellen
+        // Create JSON object for payload from the decoded string.
 
         /* eslint-disable @typescript-eslint/no-unsafe-assignment */
         const payload = JSON.parse(payloadDecoded);
