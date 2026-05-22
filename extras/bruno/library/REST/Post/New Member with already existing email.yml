@@ -37,7 +37,7 @@ http:
           }
         ]
       }
-  auth: 
+  auth:
     type: bearer
     token: "{{TOKEN}}"
 

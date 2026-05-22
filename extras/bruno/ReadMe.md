@@ -53,7 +53,7 @@ muss man zunächst auf das Bruno-Icon in der linken Seitenleiste klicken.
 Anschließend klickt man auf das Icon für die Einstellungen (Zahnrad)
 oben rechts im Bruno-Fenster (Tooltipp "Open Bruno Settings"). Danach wählt man
 in der linken Menüleiste den Punkt _General_ aus und entfernt den Haken bei
-_Enable SSL Verification
+\_Enable SSL Verification
 
 ## Sensible Daten
 
@@ -120,7 +120,7 @@ den Tab _Auth_ an. Im Dropdown-Menü wählt man dann _Authorization Code_ aus un
 z.B. folgende Werte ein:
 
 | Option               | Wert                                 |
-|:---------------------|:-------------------------------------|
+| :------------------- | :----------------------------------- |
 | _Callback URL_       | `{{baseUrl}}`                        |
 | _Authorization URL_  | `{{oidcAuthUrl}}`                    |
 | _Access Token URL_   | `{{oidcTokenUrl}}`                   |

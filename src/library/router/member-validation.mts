@@ -41,6 +41,7 @@ const MemberAll = z.strictObject({
                         message: 'Invalid ISBN',
                     }),
                 author: z.string().optional(),
+                still_borrowed: z.boolean().optional(),
                 genre: z
                     .enum([
                         'FANTASY',
@@ -69,7 +70,6 @@ export const MemberUpdateSchema = MemberAll.omit({
     id: true,
     version: true,
     username: true,
-    email_address: true,
     address: true,
     books: true,
     generated: true,

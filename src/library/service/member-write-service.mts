@@ -39,7 +39,7 @@ type MemberUpdated = Prisma.MemberGetPayload<{}>;
  * The class `MemberWriteService` implements the budiness logic of the project for the write service.
  */
 export class MemberWriteService {
-    private static readonly VERSION_PATTERN = /^"\d{1,3}"/u;
+    private static readonly VERSION_PATTERN = /^"\d{1,3}"$/u;
 
     readonly #memberReadService: MemberReadService;
 
@@ -103,19 +103,21 @@ export class MemberWriteService {
             throw new NotFoundError();
         }
 
-        this.#validateUpdate(id, version);
+        await this.#validateUpdate(id, version);
 
         member.version = { increment: 1 };
         let memberUpdated: MemberUpdated | undefined;
-        await prismaClient.$transaction(async (prisma) => {
-            memberUpdated = await prisma.member.update({
-                where: {
-                    id,
-                    version: Number(version),
-                },
-                data: member,
+        try {
+            await prismaClient.$transaction(async (prisma) => {
+                memberUpdated = await prisma.member.update({
+                    where: { id },
+                    data: member,
+                });
             });
-        });
+        } catch (error) {
+            this.#logger.error('update: Error updating member with ID: %s', id);
+            throw new NotFoundError();
+        }
         this.#logger.debug(
             'update: Update member with data %s',
             JSON.stringify(memberUpdated),
@@ -191,8 +193,7 @@ export class MemberWriteService {
         }
 
         const version = Number.parseInt(versionStr.slice(1, -1), 10);
-        // FIXME: check if member with id exists
-        const memberDB = { version: 0 };
+        const memberDB = await this.#memberReadService.findById({ id });
 
         if (version < memberDB.version) {
             this.#logger.debug(
