@@ -127,6 +127,33 @@ export class MemberWriteService {
     }
 
     /**
+     * Deletes a member with the given ID.
+     *
+     * @param id The ID of the member, that should be deleted.
+     * @returns true if the member was deleted, otherwise false.
+     */
+    async delete(id: number) {
+        this.#logger.debug('delete: Deleting member with ID: %s', id);
+
+        const member = await prismaClient.member.findUnique({
+            where: { id },
+        });
+        if (member === null) {
+            this.#logger.debug('delete: Member with ID: %s not found', id);
+            return false;
+        }
+
+        await prismaClient.$transaction(async (prisma) => {
+            await prisma.member.delete({
+                where: { id },
+            });
+        });
+
+        this.#logger.debug('delete: Member with ID: %s deleted', id);
+        return true;
+    }
+
+    /**
      * Validates the creation of a new member by checking if a member with the same username already exists.
      *
      * @param param0 The object, that holds the username to be checked.
