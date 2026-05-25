@@ -6,6 +6,7 @@
   // https://2ality.com/2025/01/tsconfig-json.html
   "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node24/tsconfig"],
   "include": ["src/**/*", "test/**/*", "scripts/*"],
+  "exclude": ["src/config"],
   "compilerOptions": {
     // uebersetzter JS-Code im Hinblick auf Module. "nodenext" erfordert dasselbe fuer "moduleResolution"
     "module": "nodenext",

@@ -56,12 +56,11 @@ const host = (keycloak?.host as string | undefined) ?? 'keycloak';
 const port = (keycloak?.port as number | undefined) ?? 8443;
 const authServerUrl = `${schema}://${host}:${port}`;
 // Keycloak ist in Sicherheits-Bereiche (= realms) unterteilt
-const realm = (keycloak?.realm as string | undefined) ?? 'javascript';
+const realm = (keycloak?.realm as string | undefined) ?? 'python';
 const issuer = `${authServerUrl}/realms/${realm}`;
 const oidcUrl = `${issuer}/protocol/openid-connect`;
 const jwksUri = `${oidcUrl}/certs`;
-const clientId =
-    (keycloak?.clientId as string | undefined) ?? 'javascript-client';
+const clientId = (keycloak?.clientId as string | undefined) ?? 'python-client';
 const audience = ['account'];
 
 // fuer KeycloakService

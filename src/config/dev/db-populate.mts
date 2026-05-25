@@ -20,9 +20,10 @@
 
 /* eslint-disable @stylistic/quotes */
 
-import { PrismaPg } from '@prisma/adapter-pg';
+// FIXME: Copy von "db-populate.ts" aus dem alten Projekt, muss noch angepasst werden!
+// import { PrismaPg } from '@prisma/adapter-pg';
 import { readFile } from 'node:fs/promises';
-import process from 'node:process';
+// import process from 'node:process';
 import { URL } from 'node:url';
 import { PrismaClient } from '../../generated/prisma/client.ts';
 import { getLogger } from '../../logger/logger.mts';
@@ -41,7 +42,7 @@ export class DbPopulateService {
 
     readonly #prisma: PrismaClient;
 
-    readonly #prismaAdmin: PrismaClient;
+    // readonly #prismaAdmin: PrismaClient;
 
     readonly #logger = getLogger(DbPopulateService.name);
 
@@ -54,13 +55,13 @@ export class DbPopulateService {
         // aber OHNE Logging der Queries
         this.#prisma = new PrismaClient({ adapter, errorFormat: 'pretty' });
 
-        const adapterAdmin = new PrismaPg({
-            connectionString: process.env['DATABASE_URL_ADMIN'],
-        });
-        this.#prismaAdmin = new PrismaClient({
-            adapter: adapterAdmin,
-            errorFormat: 'pretty',
-        });
+        // const adapterAdmin = new PrismaPg({
+        //     connectionString: process.env['DATABASE_URL_ADMIN'],
+        // });
+        // this.#prismaAdmin = new PrismaClient({
+        //     adapter: adapterAdmin,
+        //     errorFormat: 'pretty',
+        // });
     }
 
     async populate() {
@@ -81,7 +82,7 @@ export class DbPopulateService {
 
         const copyScript = new URL('copy-csv.sql', this.#dbURL); // eslint-disable-line sonarjs/no-duplicate-string
         this.#logger.debug('copyScript = %s', copyScript); // eslint-disable-line sonarjs/no-duplicate-string
-        const copyStatements = await readFile(copyScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
+        // const copyStatements = await readFile(copyScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
 
         await this.#prisma.$connect();
         await this.#prisma.$transaction(async (tx) => {
@@ -92,11 +93,11 @@ export class DbPopulateService {
 
         // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
         // https://www.postgresql.org/docs/current/sql-copy.html
-        await this.#prismaAdmin.$connect();
-        await this.#prismaAdmin.$transaction(async (tx) => {
-            await tx.$executeRawUnsafe(copyStatements);
-        });
-        await this.#prismaAdmin.$disconnect();
+        // await this.#prismaAdmin.$connect();
+        // await this.#prismaAdmin.$transaction(async (tx) => {
+        //     await tx.$executeRawUnsafe(copyStatements);
+        // });
+        // await this.#prismaAdmin.$disconnect();
     }
 }
 /* eslint-enable @stylistic/quotes */

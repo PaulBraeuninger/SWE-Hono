@@ -16,8 +16,6 @@
 /**
  * Das Modul enthält die Konfiguration für den _Bun_-basierten Server.
  * @packageDocumentation
- *
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 
 import { readFile } from 'node:fs/promises';

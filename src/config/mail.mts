@@ -47,7 +47,6 @@ const to = (mail?.to as string | undefined) ?? '"Foo Bar" <Foo.Bar@acme.com>';
 
 /**
  * Konfiguration für den Mail-Client mit _nodemailer_.
- * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const options: Options = {
     host,
