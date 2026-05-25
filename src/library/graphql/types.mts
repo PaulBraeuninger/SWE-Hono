@@ -294,6 +294,9 @@ export const toSearchParameter = (param?: SearchParameterInput) => {
 
 // MUTATIONS
 
+// --------------------------------------------------------------------------------------------------------------------
+// C r e a t e
+// --------------------------------------------------------------------------------------------------------------------
 export type CreateMemberInput = {
     username: string;
     firstName: string;
@@ -321,9 +324,6 @@ export type CreateMemberInput = {
     }[];
 };
 
-// --------------------------------------------------------------------------------------------------------------------
-// C r e a t e
-// --------------------------------------------------------------------------------------------------------------------
 export const toCreate = (member: CreateMemberInput): MemberCreate => {
     const {
         username,
@@ -375,6 +375,11 @@ export type CreatePayload = {
 // --------------------------------------------------------------------------------------------------------------------
 // U p d a t e
 // --------------------------------------------------------------------------------------------------------------------
+export type UpdateMemberInput = Omit<MemberCreate, 'address'> & {
+    id: ID;
+    version: Int;
+};
+
 export const toUpdate = (
     member: CreateMemberInput,
     version: Int,
@@ -389,6 +394,7 @@ export const toUpdate = (
         memberSince,
         isStudent,
         interests,
+        address,
     } = member;
     const updateData: MemberUpdate = {
         version,
@@ -401,6 +407,12 @@ export const toUpdate = (
         memberSince: memberSince ? toDateOrNull(memberSince) : null,
         isStudent: isStudent ?? null,
         interests: interests ?? [],
+        address: {
+            update: {
+                postalCode: address?.postalCode ?? 'N/A',
+                place: address?.place ?? 'N/A',
+            },
+        },
     };
     return updateData;
 };
