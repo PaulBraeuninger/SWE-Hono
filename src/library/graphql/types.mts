@@ -5,6 +5,10 @@
  */
 
 import { MemberWithAddressAndBooks } from '../service/member-read-service.mts';
+import {
+    MemberCreate,
+    MemberUpdate,
+} from '../service/member-write-service.mts';
 import { SearchParameter } from '../service/searchparams.mts';
 
 export type ID = string & { readonly __brand: 'ID' };
@@ -20,6 +24,8 @@ export const toID = (value: string | number): ID => {
 export const toInt = (num: number): Int =>
     (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
+const toDateOrNull = (dateStr?: string | null): Date | null =>
+    dateStr === undefined || dateStr === null ? null : new Date(dateStr);
 
 export const typeDefinitions = `
 
@@ -32,7 +38,13 @@ export const typeDefinitions = `
         members(input: SearchParameterInput): [Member!]!
     }
 
-    # TODO add mutations for creating, updating, and deleting members and their books
+    type Mutation {
+        "Creates a new member with the provided details"
+        createMember(input: CreateMemberInput!): CreatePayload
+        updateMember(id: ID!, version: Int!, input: CreateMemberInput!): UpdatePayload
+        deleteMember(id: ID!, version: Int!): DeletePayload
+        login(username: String!, password: String!): TokenPayload
+    }
 
     "Represents a library member as aggregate root"
     type Member {
@@ -101,6 +113,32 @@ export const typeDefinitions = `
         isStudent: Boolean
     }
 
+    input CreateMemberInput {
+        username: String!
+        firstName: String!
+        lastName: String!
+        emailAddress: String!
+        gender: Gender
+        dateOfBirth: String!
+        memberSince: String
+        isStudent: Boolean
+        interests: [String!]
+        address: CreateAddressInput
+        books: [CreateBookInput!]
+    }
+
+    input CreateAddressInput {
+        postalCode: String!
+        place: String!
+    }
+
+    input CreateBookInput {
+        name: String!
+        isbn: String!
+        author: String
+        genre: Genre
+    }
+
     "Represents available gender values"
     enum Gender {
         MALE
@@ -116,8 +154,6 @@ export const typeDefinitions = `
         CRIME_NOVEL
         NON_FICTION
     }
-
-    # TODO Inputs for mutation
 
 `;
 
@@ -254,4 +290,138 @@ export const toSearchParameter = (param?: SearchParameterInput) => {
     }
 
     return searchParam as SearchParameter;
+};
+
+// MUTATIONS
+
+export type CreateMemberInput = {
+    username: string;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    gender?: 'MALE' | 'FEMALE' | 'DIVERSE' | null;
+    dateOfBirth: string;
+    memberSince?: string;
+    isStudent?: boolean | null;
+    interests?: string[];
+    address?: {
+        postalCode: string;
+        place: string;
+    };
+    books?: {
+        name: string;
+        isbn: string;
+        author?: string;
+        genre?:
+            | 'FANTASY'
+            | 'THRILLER'
+            | 'SCIENCE_FICTION'
+            | 'CRIME_NOVEL'
+            | 'NON_FICTION';
+    }[];
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+// C r e a t e
+// --------------------------------------------------------------------------------------------------------------------
+export const toCreate = (member: CreateMemberInput): MemberCreate => {
+    const {
+        username,
+        firstName,
+        lastName,
+        emailAddress,
+        gender,
+        dateOfBirth,
+        memberSince,
+        isStudent,
+        interests,
+        address,
+        books,
+    } = member;
+    const createData: MemberCreate = {
+        version: 0,
+        username,
+        firstName,
+        lastName,
+        emailAddress,
+        gender: gender ?? null,
+        dateOfBirth,
+        memberSince: memberSince ? toDateOrNull(memberSince) : null,
+        isStudent: isStudent ?? null,
+        interests: interests ?? [],
+        address: {
+            create: {
+                postalCode: address?.postalCode ?? 'N/A',
+                place: address?.place ?? 'N/A',
+            },
+        },
+        books: {
+            create:
+                books?.map((book) => ({
+                    name: book.name,
+                    isbn: book.isbn,
+                    author: book.author ?? null,
+                    genre: book.genre ?? null,
+                })) ?? [],
+        },
+    };
+    return createData;
+};
+
+export type CreatePayload = {
+    readonly id: ID;
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+// U p d a t e
+// --------------------------------------------------------------------------------------------------------------------
+export const toUpdate = (
+    member: CreateMemberInput,
+    version: Int,
+): MemberUpdate => {
+    const {
+        username,
+        firstName,
+        lastName,
+        emailAddress,
+        gender,
+        dateOfBirth,
+        memberSince,
+        isStudent,
+        interests,
+    } = member;
+    const updateData: MemberUpdate = {
+        version,
+        username,
+        firstName,
+        lastName,
+        emailAddress,
+        gender: gender ?? null,
+        dateOfBirth,
+        memberSince: memberSince ? toDateOrNull(memberSince) : null,
+        isStudent: isStudent ?? null,
+        interests: interests ?? [],
+    };
+    return updateData;
+};
+
+export type UpdatePayload = {
+    version: Int;
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+// D e l e t e
+// --------------------------------------------------------------------------------------------------------------------
+export type DeletePayload = {
+    success: boolean;
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+// A u t h e n t i c a t i o n
+// --------------------------------------------------------------------------------------------------------------------
+export type TokenPayload = {
+    access_token: string;
+    expires_in: Int;
+    refresh_token: string;
+    refresh_expires_in: Int;
 };
