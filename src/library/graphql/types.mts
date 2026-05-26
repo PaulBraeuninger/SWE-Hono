@@ -24,7 +24,7 @@ export const toID = (value: string | number): ID => {
 export const toInt = (num: number): Int =>
     (Number.isInteger(num) ? num : Math.round(num)) as Int;
 export const toNumber = (id: ID): number => Number.parseInt(id, 10);
-const toDateOrNull = (dateStr?: string | null): Date | null =>
+const toDateOrNull = (dateStr: string | Date): Date | null =>
     dateStr === undefined || dateStr === null ? null : new Date(dateStr);
 
 export const typeDefinitions = `
@@ -375,16 +375,14 @@ export type CreatePayload = {
 // --------------------------------------------------------------------------------------------------------------------
 // U p d a t e
 // --------------------------------------------------------------------------------------------------------------------
-export type UpdateMemberInput = Omit<MemberCreate, 'address'> & {
+export type UpdateMemberInput = Omit<MemberCreate, 'books'> & {
     id: ID;
     version: Int;
 };
 
-export const toUpdate = (
-    member: CreateMemberInput,
-    version: Int,
-): MemberUpdate => {
+export const toUpdate = (member: UpdateMemberInput): MemberUpdate => {
     const {
+        version,
         username,
         firstName,
         lastName,
@@ -394,7 +392,6 @@ export const toUpdate = (
         memberSince,
         isStudent,
         interests,
-        address,
     } = member;
     const updateData: MemberUpdate = {
         version,
@@ -407,12 +404,6 @@ export const toUpdate = (
         memberSince: memberSince ? toDateOrNull(memberSince) : null,
         isStudent: isStudent ?? null,
         interests: interests ?? [],
-        address: {
-            update: {
-                postalCode: address?.postalCode ?? 'N/A',
-                place: address?.place ?? 'N/A',
-            },
-        },
     };
     return updateData;
 };
