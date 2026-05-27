@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql';
 import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
 import {
-    MemberCreateSchema,
+    MemberCreateGraphQLSchema,
     MemberUpdateGraphQLSchema,
 } from '../router/member-validation.mts';
 import { NotFoundError } from '../service/errors.mts';
@@ -10,8 +10,6 @@ import {
     type CreateMemberInput,
     type UpdateMemberInput,
     type CreatePayload,
-    type DeletePayload,
-    type ID,
     type UpdatePayload,
     toCreate,
     toUpdate,
@@ -28,17 +26,19 @@ const { memberWriteService, keycloakService } = container;
 // --------------------------------------------------------------------------------------------------------------------
 const validateMemberCreate = (member: CreateMemberInput) => {
     try {
-        MemberCreateSchema.parse(member);
+        MemberCreateGraphQLSchema.parse(member);
     } catch (err) {
         if (err instanceof Error) {
             const { message } = err;
             if (err.name === 'ZodError') {
+                logger.error('Validation error: %s', message);
                 throw new GraphQLError(message, {
                     extensions: {
                         code: 'BAD_USER_INPUT',
                     },
                 });
             } else {
+                logger.error('Validation error: %s', message);
                 throw new GraphQLError(message, {
                     extensions: {
                         code: 'INTERNAL_SERVER_ERROR',
@@ -46,6 +46,7 @@ const validateMemberCreate = (member: CreateMemberInput) => {
                 });
             }
         } else {
+            logger.error(`Unknown validation error: ${err}`);
             throw new GraphQLError('Unknown error', {
                 extensions: {
                     code: 'INTERNAL_SERVER_ERROR',
@@ -107,7 +108,7 @@ const validateMemberUpdate = (member: UpdateMemberInput) => {
 };
 
 export const updateHandler = async (
-    member: MemberUpdateInput,
+    member: UpdateMemberInput,
 ): Promise<UpdatePayload> => {
     logger.debug('updateHandler: member=%o', member);
 
@@ -119,7 +120,7 @@ export const updateHandler = async (
     let version: number | undefined;
     try {
         version = await memberWriteService.update({
-            id: toInt(member.id),
+            id: toNumber(member.id),
             member: updatedMember,
             version: `"${member.version}"`,
         });

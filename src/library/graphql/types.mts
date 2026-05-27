@@ -27,7 +27,7 @@ export const toNumber = (id: ID): number => Number.parseInt(id, 10);
 const toDateOrNull = (dateStr: string | Date): Date | null =>
     dateStr === undefined || dateStr === null ? null : new Date(dateStr);
 
-export const typeDefinitions = `
+export const typeDefs = `
 
     "Root query type providing read access to members"
     type Query {
@@ -124,7 +124,7 @@ export const typeDefinitions = `
         isStudent: Boolean
         interests: [String!]
         address: CreateAddressInput
-        books: [CreateBookInput!]
+        books: [CreateBookInput]
     }
 
     input CreateAddressInput {
@@ -375,7 +375,7 @@ export type CreatePayload = {
 // --------------------------------------------------------------------------------------------------------------------
 // U p d a t e
 // --------------------------------------------------------------------------------------------------------------------
-export type UpdateMemberInput = Omit<MemberCreate, 'books'> & {
+export type UpdateMemberInput = Omit<CreateMemberInput, 'books'> & {
     id: ID;
     version: Int;
 };

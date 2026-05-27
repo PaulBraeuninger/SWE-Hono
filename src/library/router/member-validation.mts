@@ -76,10 +76,56 @@ export const MemberUpdateSchema = MemberAll.omit({
     updated: true,
 }).readonly();
 
-export const MemberUpdateGraphQLSchema = MemberAll.omit({
-    username: true,
-    email_address: true,
-}).readonly();
-
 export type MemberCreateType = z.infer<typeof MemberCreateSchema>;
 export type MemberUpdateType = z.infer<typeof MemberUpdateSchema>;
+
+// -------------------------------------------------------------------------------------------------
+// G r a p h Q L   S c h e m a s
+// -------------------------------------------------------------------------------------------------
+const GraphQLGenreEnum = z.enum([
+    'FANTASY',
+    'SCIENCE_FICTION',
+    'CRIME_NOVEL',
+    'THRILLER',
+    'NON_FICTION',
+]);
+
+const GraphQLInterestsEnum = z.enum([
+    'FANTASY',
+    'SCIENCE_FICTION',
+    'CRIME_NOVEL',
+    'THRILLER',
+    'NON_FICTION',
+]);
+
+const GraphQLAddressSchema = z.strictObject({
+    postalCode: z.string(),
+    place: z.string(),
+});
+
+const GraphQLBookSchema = z.strictObject({
+    name: z.string(),
+    isbn: z.string().refine((isbn) => ISBN.parse(isbn)?.isValid === true, {
+        message: 'Invalid ISBN',
+    }),
+    author: z.string().optional(),
+    genre: GraphQLGenreEnum.optional(),
+});
+
+export const MemberCreateGraphQLSchema = z
+    .strictObject({
+        username: z.string(),
+        lastName: z.string(),
+        firstName: z.string(),
+        gender: z.enum(['MALE', 'FEMALE', 'DIVERSE']).optional(),
+        dateOfBirth: z.coerce.date(),
+        memberSince: z.coerce.date().optional(),
+        isStudent: z.boolean().optional(),
+        emailAddress: z.email(),
+        interests: z.array(GraphQLInterestsEnum).optional(),
+        address: GraphQLAddressSchema.optional(),
+        books: z.array(GraphQLBookSchema).optional(),
+    })
+    .readonly();
+
+export const MemberUpdateGraphQLSchema = MemberCreateGraphQLSchema;
