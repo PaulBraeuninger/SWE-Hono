@@ -17,7 +17,7 @@ config:
 request:
   variables:
     - name: baseUrl
-      value: https://127.0.0.1:8000
+      value: https://127.0.0.1:3000
     - name: keycloakUrl
       value: https://localhost:8843
     - name: realm

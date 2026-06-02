@@ -11,7 +11,7 @@ http:
       value: '"0"'
   params:
     - name: id
-      value: "2"
+      value: "1"
       type: path
   body:
     type: json
@@ -19,7 +19,7 @@ http:
       {
           "first_name": "Updated",
           "last_name": "Member",
-          "gender": "M",
+          "gender": "MALE",
           "date_of_birth": "1990-01-01",
           "member_since": "2020-01-01",
           "is_student": false,
