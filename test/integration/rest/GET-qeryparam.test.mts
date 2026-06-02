@@ -4,7 +4,7 @@ import { Member } from "../../../src/generated/prisma/client.ts";
 import { Page } from "../../../src/library/router/page.mts";
 import { MemberWithAddress } from "../../../src/library/service/member-read-service.mts";
 
-const lastNames = ['Braeuninger', 'Menke'];
+const lastNames = ['Admin', 'Menke'];
 const lastNamesInvalid = ['abc', 'def'];
 const interests = ['FANTASY', 'SCIENCE_FICTION'];
 const interestsInvalid = ['RELIGIOUS', 'JOKES'];
