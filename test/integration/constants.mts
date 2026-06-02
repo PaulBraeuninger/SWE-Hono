@@ -4,8 +4,8 @@
  * These constants are used across multiple test files to avoid hardcoding values and to improve maintainability.
  */
 
-import { paths } from '../../src/config/paths.mts'
-import { serverConfig } from '../../src/config/server.mts'
+import { paths } from '../../src/config/paths.mts';
+import { serverConfig } from '../../src/config/server.mts';
 
 const { host, port } = serverConfig;
 

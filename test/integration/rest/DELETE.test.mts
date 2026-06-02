@@ -1,6 +1,6 @@
-import { beforeAll, describe, expect, test } from "vitest";
-import { getToken } from "../token.mts";
-import { DELETE, restURL } from "../constants.mts";
+import { beforeAll, describe, expect, test } from 'vitest';
+import { getToken } from '../token.mts';
+import { DELETE, restURL } from '../constants.mts';
 
 const id = 3;
 

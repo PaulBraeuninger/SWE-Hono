@@ -24,7 +24,9 @@ export const getToken = async (username: string, password: string) => {
         console.error(`!!!username=${username}, password=${password}`);
         console.error(`!!!status=${response.status}`);
         console.error('!!!body=%j', body);
-        throw new Error('Statuscode is not 200 or no string as access_token in body');
+        throw new Error(
+            'Statuscode is not 200 or no string as access_token in body',
+        );
     }
     return body.access_token;
 };
