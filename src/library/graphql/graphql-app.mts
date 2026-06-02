@@ -35,25 +35,11 @@ const resolvers = {
         },
         updateMember: async (
             _: unknown,
-            {
-                id,
-                version,
-                input,
-            }: {
-                id: string;
-                version: number;
-                input: CreateMemberInput;
-            },
+            { input }: { input: UpdateMemberInput },
             { request }: GraphQLContext,
         ) => {
             await rolesRequired(request, 'admin', 'user');
-            const { books: _books, ...rest } = input;
-            const updateInput: UpdateMemberInput = {
-                id: toID(id),
-                version: toInt(version),
-                ...rest,
-            };
-            return updateHandler(updateInput);
+            return updateHandler(input);
         },
         login: async (
             _: unknown,
@@ -80,7 +66,7 @@ app.post('/graphql', async (c) => {
     const { body } = raw;
 
     const response = await yogaServer.fetch(raw, { body });
-    logger.debug('/graphql: response=%o', response);
+    logger.debug('/graphql: response=%j', response);
 
     return c.newResponse(response.body, response);
 });

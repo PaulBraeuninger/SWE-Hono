@@ -128,4 +128,14 @@ export const MemberCreateGraphQLSchema = z
     })
     .readonly();
 
-export const MemberUpdateGraphQLSchema = MemberCreateGraphQLSchema;
+export const MemberUpdateGraphQLSchema = z.strictObject({
+    username: z.string().optional(),
+    lastName: z.string().optional(),
+    firstName: z.string().optional(),
+    gender: z.enum(['MALE', 'FEMALE', 'DIVERSE']).optional(),
+    dateOfBirth: z.coerce.date(),
+    memberSince: z.coerce.date().optional(),
+    isStudent: z.boolean().optional(),
+    emailAddress: z.email(),
+    interests: z.array(GraphQLInterestsEnum).optional(),
+});

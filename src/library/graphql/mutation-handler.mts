@@ -108,27 +108,27 @@ const validateMemberUpdate = (member: UpdateMemberInput) => {
 };
 
 export const updateHandler = async (
-    member: UpdateMemberInput,
+    input: UpdateMemberInput,
 ): Promise<UpdatePayload> => {
-    logger.debug('updateHandler: member=%o', member);
+    logger.debug('updateHandler: input=%o', input);
 
-    validateMemberUpdate(member);
+    validateMemberUpdate(input);
 
-    const updatedMember = toUpdate(member);
+    const updatedMember = toUpdate(input);
     logger.debug('updateHandler: update=%o', updatedMember);
 
     let version: number | undefined;
     try {
         version = await memberWriteService.update({
-            id: toNumber(member.id),
+            id: toNumber(input.id),
             member: updatedMember,
-            version: `"${member.version}"`,
+            version: `"${input.version}"`,
         });
     } catch (err) {
         if (err instanceof NotFoundError) {
             logger.debug(
                 'updateHandler: member with ID: %s not found',
-                member.id,
+                input.id,
             );
             throw new GraphQLError(err.message, {
                 extensions: {

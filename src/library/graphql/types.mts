@@ -375,7 +375,7 @@ export type CreatePayload = {
 // --------------------------------------------------------------------------------------------------------------------
 // U p d a t e
 // --------------------------------------------------------------------------------------------------------------------
-export type UpdateMemberInput = Omit<CreateMemberInput, 'books'> & {
+export type UpdateMemberInput = Omit<CreateMemberInput, 'books' | 'address'> & {
     id: ID;
     version: Int;
 };
