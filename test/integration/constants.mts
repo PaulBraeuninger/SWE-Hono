@@ -29,4 +29,6 @@ export const AUTHORIZATION = 'Authorization';
 export const IF_NONE_MATCH = 'If-None-Match';
 export const IF_MATCH = 'If-Match';
 
+export const X_WWW_FORM_URL_ENCODED = 'application/x-www-form-urlencoded';
+
 export const GRAPHQL_RESPONSE_JSON = 'application/graphql-response+json';
