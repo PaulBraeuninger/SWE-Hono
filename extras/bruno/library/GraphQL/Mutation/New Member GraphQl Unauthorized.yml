@@ -1,7 +1,7 @@
 info:
-  name: New Member with invalid data
+  name: New Member GraphQl Unauthorized
   type: graphql
-  seq: 2
+  seq: 3
 
 graphql:
   method: POST
@@ -11,29 +11,25 @@ graphql:
       value: ""
       disabled: true
   body:
-    query: |-
+    query: |
       mutation {
         createMember(
-          createMemberInput: {
-            username: "invalid_graphql"
-            firstName: "wrong first name"
-            lastName: "wrong last name"
+          input: {
+            username: "graphql"
+            firstName: "Graph"
+            lastName: "Ql"
             gender: MALE
-            dateOfBirth: "1990-01-01"
-            memberSince: "2020-01-01"
+            dateOfBirth: "2000-01-01T00:00:00.000Z"
+            memberSince: "2015-01-01T00:00:00.000Z"
             isStudent: false
-            emailAddress: "invalid@"
-            interests: [FANTASY]
-            address: {
-              postalCode: "123"
-              place: "wrong city"
-              }
+            emailAddress: "grphql@acme.com"
+            interests: ["FANTASY"]
+            address: { postalCode: "12345", place: "Test" }
             books: [
               {
                 name: "GraphQL for Beginners"
                 isbn: "9783161484100"
                 author: "John Doe"
-                stillBorrowed: false
                 genre: NON_FICTION
               }
             ]

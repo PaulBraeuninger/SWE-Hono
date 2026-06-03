@@ -17,12 +17,12 @@ http:
         "username": "galaxy_devron",
         "first_name": "Dennis",
         "last_name": "Braun",
-        "gender": "M",
+        "gender": "MALE",
         "date_of_birth": "2000-01-01",
         "member_since": "2024-01-01",
         "email_address": "galaxy_devron@example.com",
         "is_student": false,
-        "interests": ["F", "S"],
+        "interests": ["FANTASY", "SCIENCE_FICTION"],
         "address": {
           "postal_code": "76131",
           "place": "Karlsruhe"
@@ -33,7 +33,7 @@ http:
             "isbn": "978-0-59-333302-0",
             "author": "Frank Herbert",
             "still_borrowed": false,
-            "genre": "S"
+            "genre": "SCIENCE_FICTION"
           }
         ]
       }
