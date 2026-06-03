@@ -9,7 +9,7 @@ import { serverConfig } from '../../src/config/server.mts';
 
 const { host, port } = serverConfig;
 
-export const baseURL = `http://${host}:${port}`;
+export const baseURL = `https://${host}:${port}`;
 export const restURL = `${baseURL}/rest`;
 export const graphqlURL = `${baseURL}/graphql`;
 
