@@ -41,8 +41,6 @@ export const typeDefs = `
     type Mutation {
         "Creates a new member with the provided details"
         createMember(input: CreateMemberInput!): CreatePayload
-        updateMember(id: ID!, version: Int!, input: CreateMemberInput!): UpdatePayload
-        deleteMember(id: ID!, version: Int!): DeletePayload
         login(username: String!, password: String!): TokenPayload
     }
 
@@ -82,16 +80,6 @@ export const typeDefs = `
     "Generated ID after creating a new member"
     type CreatePayload {
         id: ID!
-    }
-
-    "Version number after updating a member"
-    type UpdatePayload {
-        version: Int
-    }
-
-    "Indicates whether a delete operation was successful"
-    type DeletePayload {
-        success: Boolean
     }
 
     "Represents JWT token data"
@@ -370,53 +358,6 @@ export const toCreate = (member: CreateMemberInput): MemberCreate => {
 
 export type CreatePayload = {
     readonly id: ID;
-};
-
-// --------------------------------------------------------------------------------------------------------------------
-// U p d a t e
-// --------------------------------------------------------------------------------------------------------------------
-export type UpdateMemberInput = Omit<CreateMemberInput, 'books' | 'address'> & {
-    id: ID;
-    version: Int;
-};
-
-export const toUpdate = (member: UpdateMemberInput): MemberUpdate => {
-    const {
-        version,
-        username,
-        firstName,
-        lastName,
-        emailAddress,
-        gender,
-        dateOfBirth,
-        memberSince,
-        isStudent,
-        interests,
-    } = member;
-    const updateData: MemberUpdate = {
-        version,
-        username,
-        firstName,
-        lastName,
-        emailAddress,
-        gender: gender ?? null,
-        dateOfBirth,
-        memberSince: memberSince ? toDateOrNull(memberSince) : null,
-        isStudent: isStudent ?? null,
-        interests: interests ?? [],
-    };
-    return updateData;
-};
-
-export type UpdatePayload = {
-    version: Int;
-};
-
-// --------------------------------------------------------------------------------------------------------------------
-// D e l e t e
-// --------------------------------------------------------------------------------------------------------------------
-export type DeletePayload = {
-    success: boolean;
 };
 
 // --------------------------------------------------------------------------------------------------------------------

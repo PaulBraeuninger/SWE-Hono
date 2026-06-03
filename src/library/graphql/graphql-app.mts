@@ -1,19 +1,9 @@
 import { createSchema, createYoga } from 'graphql-yoga';
 import { Hono } from 'hono';
 import { getLogger } from '../../logger/logger.mts';
-import {
-    createHandler,
-    updateHandler,
-    tokenHandler,
-} from './mutation-handler.mts';
+import { createHandler, tokenHandler } from './mutation-handler.mts';
 import { rolesRequired } from './roles-required.mts';
-import {
-    type CreateMemberInput,
-    type UpdateMemberInput,
-    toID,
-    toInt,
-    typeDefs,
-} from './types.mts';
+import { type CreateMemberInput, typeDefs } from './types.mts';
 
 const logger = getLogger('graphql-app', 'file');
 type GraphQLContext = {
@@ -32,14 +22,6 @@ const resolvers = {
         ) => {
             await rolesRequired(request, 'admin', 'user');
             return createHandler(input);
-        },
-        updateMember: async (
-            _: unknown,
-            { input }: { input: UpdateMemberInput },
-            { request }: GraphQLContext,
-        ) => {
-            await rolesRequired(request, 'admin', 'user');
-            return updateHandler(input);
         },
         login: async (
             _: unknown,

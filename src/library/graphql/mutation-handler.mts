@@ -8,11 +8,8 @@ import {
 import { NotFoundError } from '../service/errors.mts';
 import {
     type CreateMemberInput,
-    type UpdateMemberInput,
     type CreatePayload,
-    type UpdatePayload,
     toCreate,
-    toUpdate,
     toID,
     toInt,
     toNumber,
@@ -71,75 +68,6 @@ export const createHandler = async (
 
     logger.debug('createHandler: id=%d', id);
     return { id: toID(id) };
-};
-
-// --------------------------------------------------------------------------------------------------------------------
-// U P D A T E
-// --------------------------------------------------------------------------------------------------------------------
-const validateMemberUpdate = (member: UpdateMemberInput) => {
-    try {
-        MemberUpdateGraphQLSchema.parse(member);
-    } catch (err) {
-        if (err instanceof Error) {
-            const { message } = err;
-            if (err.name === 'ZodError') {
-                throw new GraphQLError(message, {
-                    extensions: {
-                        code: 'BAD_USER_INPUT',
-                    },
-                });
-            } else {
-                throw new GraphQLError(message, {
-                    extensions: {
-                        code: 'INTERNAL_SERVER_ERROR',
-                    },
-                });
-            }
-        } else {
-            throw new GraphQLError('Unknown error', {
-                extensions: {
-                    code: 'INTERNAL_SERVER_ERROR',
-                },
-            });
-        }
-    }
-
-    logger.debug('validateMemberUpdate: ok');
-};
-
-export const updateHandler = async (
-    input: UpdateMemberInput,
-): Promise<UpdatePayload> => {
-    logger.debug('updateHandler: input=%o', input);
-
-    validateMemberUpdate(input);
-
-    const updatedMember = toUpdate(input);
-    logger.debug('updateHandler: update=%o', updatedMember);
-
-    let version: number | undefined;
-    try {
-        version = await memberWriteService.update({
-            id: toNumber(input.id),
-            member: updatedMember,
-            version: `"${input.version}"`,
-        });
-    } catch (err) {
-        if (err instanceof NotFoundError) {
-            logger.debug(
-                'updateHandler: member with ID: %s not found',
-                input.id,
-            );
-            throw new GraphQLError(err.message, {
-                extensions: {
-                    code: 'BAD_USER_INPUT',
-                },
-            });
-        }
-    }
-
-    logger.debug('updateHandler: version=%s', version);
-    return { version: toInt(version ?? 0) };
 };
 
 // --------------------------------------------------------------------------------------------------------------------
