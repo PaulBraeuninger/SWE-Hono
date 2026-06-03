@@ -57,14 +57,14 @@ describe('MemberWriteService create', () => {
         //given
         const idMock = 1;
         const memberCreate: MemberCreate = {
-            username: 'testuser',
+            username: 'servicetestuser',
             firstName: 'Test',
             lastName: 'User',
             gender: Gender.DIVERSE,
             dateOfBirth: new Date('2000-01-01'),
             memberSince: new Date('2024-01-01'),
             isStudent: true,
-            emailAddress: 'test.user@acme.com',
+            emailAddress: 'service.test.user@acme.com',
             interests: [Genre.FANTASY, Genre.SCIENCE_FICTION],
             address: {
                 create: {
