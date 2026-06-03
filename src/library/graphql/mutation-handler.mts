@@ -1,18 +1,12 @@
 import { GraphQLError } from 'graphql';
 import { container } from '../../container.mts';
 import { getLogger } from '../../logger/logger.mts';
-import {
-    MemberCreateGraphQLSchema,
-    MemberUpdateGraphQLSchema,
-} from '../router/member-validation.mts';
-import { NotFoundError } from '../service/errors.mts';
+import { MemberCreateGraphQLSchema } from '../router/member-validation.mts';
 import {
     type CreateMemberInput,
     type CreatePayload,
     toCreate,
     toID,
-    toInt,
-    toNumber,
 } from './types.mts';
 
 const logger = getLogger('graphql-mutation-handler', 'file');

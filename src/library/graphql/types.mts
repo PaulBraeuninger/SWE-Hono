@@ -5,10 +5,7 @@
  */
 
 import { MemberWithAddressAndBooks } from '../service/member-read-service.mts';
-import {
-    MemberCreate,
-    MemberUpdate,
-} from '../service/member-write-service.mts';
+import { MemberCreate } from '../service/member-write-service.mts';
 import { SearchParameter } from '../service/searchparams.mts';
 
 export type ID = string & { readonly __brand: 'ID' };
