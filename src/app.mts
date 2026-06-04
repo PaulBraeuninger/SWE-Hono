@@ -9,11 +9,12 @@ import { createMiddleware } from 'hono/factory';
 import { secureHeaders } from 'hono/secure-headers';
 import { type ZodError } from 'zod';
 import { router as healthRouter } from './admin/health-router.mts';
-// import { graphqlApp } from './library/graphql/graphql-app.mts';
+import { graphqlApp } from './library/graphql/graphql-app.mts';
 import { router as memberReadRouter } from './library/router/member-read-router.mts';
 import { router as memberWriteRouter } from './library/router/member-write-router.mts';
 import {
     NotFoundError,
+    UsernameAlreadyExistsError,
     VersionInvalidError,
     VersionOutdatedError,
 } from './library/service/errors.mts';
@@ -66,7 +67,7 @@ app.route(paths.rest, memberReadRouter);
 app.route(paths.rest, memberWriteRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
-// app.route('/', graphqlApp);
+app.route('/', graphqlApp);
 app.route('/prometheus', prometheusRouter);
 
 const { NODE_ENV } = env;
@@ -111,6 +112,10 @@ app.onError((error, c) => {
 
     if (error instanceof ForbiddenError) {
         return createProblemDetails(c, forbidden, error.message);
+    }
+
+    if (error instanceof UsernameAlreadyExistsError) {
+        return createProblemDetails(c, unprocessableContent, error.message);
     }
 
     logger.error('Interner Fehler: %o', error);

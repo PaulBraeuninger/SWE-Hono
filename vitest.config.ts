@@ -29,7 +29,7 @@ export default defineConfig({
                     name: 'unit',
 
                     // https://vitest.dev/config/include.html
-                    include: ['src/*/service/*.test.mts'],
+                    include: ['src/**/service/*.test.mts'],
 
                     // https://vitest.dev/config/bail.html
                     bail: 1,
@@ -52,7 +52,7 @@ export default defineConfig({
                     name: 'integration',
                     include: [
                         'test/integration/*.test.mts',
-                        'test/integration/*/*.test.mts',
+                        'test/integration/**/*.test.mts',
                     ],
 
                     // https://vitest.dev/config/globalsetup.html

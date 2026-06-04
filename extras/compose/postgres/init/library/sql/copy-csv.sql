@@ -21,7 +21,3 @@ SET search_path TO 'library';
 COPY member FROM '/init/library/csv/member.csv' (FORMAT csv, DELIMITER ';', HEADER true);
 COPY address FROM '/init/library/csv/address.csv' (FORMAT csv, DELIMITER ';', HEADER true);
 COPY book FROM '/init/library/csv/book.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-
-SELECT setval('member_id_seq', (SELECT MAX(id) FROM member) + 1, false);
-SELECT setval('address_id_seq', (SELECT MAX(id) FROM address) + 1, false);
-SELECT setval('book_id_seq', (SELECT MAX(id) FROM book) + 1, false);

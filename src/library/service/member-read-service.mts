@@ -42,6 +42,8 @@ export type MemberWithAddressAndBooks = Prisma.MemberGetPayload<{
  * Service for reading operations of library member data.
  */
 export class MemberReadService {
+    static readonly ID_PATTERN = /^[1-9]\d{0,10}$/u;
+
     readonly #includeAddress: MemberInclude = {
         address: true,
     };
@@ -75,7 +77,7 @@ export class MemberReadService {
 
         if (member === null) {
             this.#logger.debug(`Member with id ${id} not found`);
-            throw new Error(`Member with id=${id} not found`);
+            throw new NotFoundError(`Member with id=${id} not found`);
         }
 
         member.interests ??= [];

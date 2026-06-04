@@ -28,7 +28,7 @@ describe('GET /rest', () => {
 
         // Assert
         expect(status).toBe(200);
-        expect(headers.get(CONTENT_TYPE)).toBe(/json/iu);
+        expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
         const body = (await response.json()) as Page<Member>;
 
@@ -54,7 +54,7 @@ describe('GET /rest', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(headers.get(CONTENT_TYPE)).toBe(/json/iu);
+            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
             const body = (await response.json()) as Page<MemberWithAddress>;
 
@@ -102,7 +102,7 @@ describe('GET /rest', () => {
 
             // Assert
             expect(status).toBe(200);
-            expect(headers.get(CONTENT_TYPE)).toBe(/json/iu);
+            expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
             const body = (await response.json()) as Page<Member>;
 
