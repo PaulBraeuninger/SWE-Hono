@@ -9,10 +9,10 @@ import { Member } from '../../../src/generated/prisma/client.ts';
 import { Page } from '../../../src/library/router/page.mts';
 import { MemberWithAddress } from '../../../src/library/service/member-read-service.mts';
 
-const lastNames = ['Admin', 'Menke'];
+const lastNamesValid = ['Menke'];
 const lastNamesInvalid = ['abc', 'def'];
-const interests = ['FANTASY', 'SCIENCE_FICTION'];
-const interestsInvalid = ['RELIGIOUS', 'JOKES'];
+const interestsValid = ['fantasy'];
+const interestsInvalid = ['religion', 'jokes'];
 
 describe('GET /rest', () => {
     test.concurrent('Get all members', async () => {
@@ -37,11 +37,11 @@ describe('GET /rest', () => {
             .forEach((id) => expect(id).toBeDefined());
     });
 
-    test.concurrent.each(lastNames)(
+    test.concurrent.each(lastNamesValid)(
         'Get members with name %s',
-        async (name) => {
+        async (lastName) => {
             // Arrange
-            const params = new URLSearchParams({ name });
+            const params = new URLSearchParams({ lastName });
             const url = `${restURL}?${params.toString()}`;
             const requestHeaders = new Headers();
             requestHeaders.append(ACCEPT, APPLICATION_JSON);
@@ -62,15 +62,15 @@ describe('GET /rest', () => {
 
             body.content
                 .map((member) => member.lastName)
-                .forEach((memberName) => expect(memberName).toBe(name));
+                .forEach((memberName) => expect(memberName).toBe(lastName));
         },
     );
 
     test.concurrent.each(lastNamesInvalid)(
         'No members should be found with name %s',
-        async (name) => {
+        async (lastName) => {
             // Arrange
-            const params = new URLSearchParams({ name });
+            const params = new URLSearchParams({ lastName });
             const url = `${restURL}?${params.toString()}`;
             const requestHeaders = new Headers();
             requestHeaders.append(ACCEPT, APPLICATION_JSON);
@@ -85,11 +85,11 @@ describe('GET /rest', () => {
         },
     );
 
-    test.concurrent.each(interests)(
+    test.concurrent.each(interestsValid)(
         'Get members with interest %s',
-        async (interest) => {
+        async (interests) => {
             // Arrange
-            const params = new URLSearchParams({ [interest]: 'true' });
+            const params = new URLSearchParams({ [interests]: 'true' });
             const url = `${restURL}?${params.toString()}`;
             const requestHeaders = new Headers();
             requestHeaders.append(ACCEPT, APPLICATION_JSON);
@@ -112,7 +112,7 @@ describe('GET /rest', () => {
                 .map((member) => member.interests)
                 .forEach((memberInterests) =>
                     expect(memberInterests).toStrictEqual(
-                        expect.arrayContaining([interest.toUpperCase()]),
+                        expect.arrayContaining([interests.toUpperCase()]),
                     ),
                 );
         },
@@ -123,7 +123,26 @@ describe('GET /rest', () => {
         async (interest) => {
             // Arrange
             const params = new URLSearchParams({ [interest]: 'true' });
-            const url = `${restURL}?${params.toString()}`;
+            const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append(ACCEPT, APPLICATION_JSON);
+
+            // Act
+            const { status } = await fetch(url, {
+                headers: requestHeaders,
+            });
+
+            // Assert
+            expect(status).toBe(404);
+        },
+    );
+
+    test.concurrent(
+        'No members should be found with invalid search parameters',
+        async () => {
+            // Arrange
+            const params = new URLSearchParams({ foo: 'bar' });
+            const url = `${restURL}?${params}`;
             const requestHeaders = new Headers();
             requestHeaders.append(ACCEPT, APPLICATION_JSON);
 

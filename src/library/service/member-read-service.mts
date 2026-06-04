@@ -199,16 +199,18 @@ export class MemberReadService {
         });
 
         if (!isValid) {
-            isValid = this.#checkGender(searchparameter);
+            isValid = this.#isGenderValid(searchparameter);
         }
+
+        this.#logger.debug('isSearchParamValid: isValid=%s', isValid);
 
         return isValid;
     }
 
-    #checkGender(searchparam: SearchParameter): boolean {
+    #isGenderValid(searchparam: SearchParameter): boolean {
         const { gender } = searchparam;
-        this.#logger.debug(`checkGender: gender=%s`, gender ?? 'undefined');
+        this.#logger.debug(`isGenderValid: gender=%s`, gender ?? 'undefined');
 
-        return gender === undefined || isValidGender(gender);
+        return gender !== undefined && isValidGender(gender);
     }
 }
