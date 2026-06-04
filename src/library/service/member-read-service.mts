@@ -77,7 +77,7 @@ export class MemberReadService {
 
         if (member === null) {
             this.#logger.debug(`Member with id ${id} not found`);
-            throw new Error(`Member with id=${id} not found`);
+            throw new NotFoundError(`Member with id=${id} not found`);
         }
 
         member.interests ??= [];
