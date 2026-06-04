@@ -15,8 +15,8 @@ http:
     data: |-
       {
         "username": "invalid_user",
-        "first_name": "wrong first name",
-        "last_name": "completely wrong surname",
+        "first_name": "Invalid",
+        "last_name": "Data",
         "gender": "X",
         "date_of_birth": "2000-01-01",
         "member_since": "2024-01-01",
@@ -24,14 +24,12 @@ http:
         "is_student": false,
         "interests": [],
         "address": {
-          "postal_code": "1234",
+          "postal_code": "12345",
           "place": "Nonexistent"
           },
         "books": []
       }
-  auth:
-    type: bearer
-    token: "{{TOKEN}}"
+  auth: inherit
 
 runtime:
   scripts:
