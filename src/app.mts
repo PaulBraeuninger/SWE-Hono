@@ -14,6 +14,7 @@ import { router as memberReadRouter } from './library/router/member-read-router.
 import { router as memberWriteRouter } from './library/router/member-write-router.mts';
 import {
     NotFoundError,
+    UsernameAlreadyExistsError,
     VersionInvalidError,
     VersionOutdatedError,
 } from './library/service/errors.mts';
@@ -111,6 +112,10 @@ app.onError((error, c) => {
 
     if (error instanceof ForbiddenError) {
         return createProblemDetails(c, forbidden, error.message);
+    }
+
+    if (error instanceof UsernameAlreadyExistsError) {
+        return createProblemDetails(c, unprocessableContent, error.message);
     }
 
     logger.error('Interner Fehler: %o', error);

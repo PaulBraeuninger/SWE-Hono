@@ -9,8 +9,8 @@ import { z } from 'zod';
 const MemberAll = z.strictObject({
     id: z.union([z.number().int().gt(0), z.string().regex(/^[1-9]\d*$/u)]),
     username: z.string(),
-    last_name: z.string(),
-    first_name: z.string(),
+    last_name: z.string().regex(/([A-Z][a-z]+)+/u),
+    first_name: z.string().regex(/([A-Z][a-z]+)+/u),
     gender: z.enum(['MALE', 'FEMALE', 'DIVERSE']).optional(),
     date_of_birth: z.coerce.date(),
     member_since: z.coerce.date().optional(),
@@ -115,8 +115,8 @@ const GraphQLBookSchema = z.strictObject({
 export const MemberCreateGraphQLSchema = z
     .strictObject({
         username: z.string(),
-        lastName: z.string(),
-        firstName: z.string(),
+        lastName: z.string().regex(/([A-Z][a-z]+)+/u),
+        firstName: z.string().regex(/([A-Z][a-z]+)+/u),
         gender: z.enum(['MALE', 'FEMALE', 'DIVERSE']).optional(),
         dateOfBirth: z.coerce.date(),
         memberSince: z.coerce.date().optional(),
@@ -127,15 +127,3 @@ export const MemberCreateGraphQLSchema = z
         books: z.array(GraphQLBookSchema).optional(),
     })
     .readonly();
-
-export const MemberUpdateGraphQLSchema = z.strictObject({
-    username: z.string().optional(),
-    lastName: z.string().optional(),
-    firstName: z.string().optional(),
-    gender: z.enum(['MALE', 'FEMALE', 'DIVERSE']).optional(),
-    dateOfBirth: z.coerce.date(),
-    memberSince: z.coerce.date().optional(),
-    isStudent: z.boolean().optional(),
-    emailAddress: z.email(),
-    interests: z.array(GraphQLInterestsEnum).optional(),
-});
