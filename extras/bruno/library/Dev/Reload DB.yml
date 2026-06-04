@@ -21,6 +21,7 @@ http:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false
@@ -35,7 +36,7 @@ runtime:
       value: application\/json
     - expression: res.body.db_populate
       operator: eq
-      value: success
+      value: ok
 
 settings:
   encodeUrl: true
