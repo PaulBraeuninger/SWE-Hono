@@ -5,12 +5,12 @@ info:
 
 http:
   method: GET
-  url: "{{restUrl}}?email_address=ole.menke@example.com"
+  url: "{{restUrl}}?emailAddress=ole.menke@example.com"
   headers:
     - name: Accept
       value: application/json
   params:
-    - name: email_address
+    - name: emailAddress
       value: ole.menke@example.com
       type: query
   auth: inherit
