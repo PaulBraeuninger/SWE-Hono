@@ -41,20 +41,29 @@ const newMember: MemberCreateType = {
     ],
 };
 
-const newMemberExistingUsername: Omit<MemberCreateType, 'books' | 'address'> = {
+const newMemberExistingUsername: Omit<MemberCreateType, 'books'> = {
     username: 'admin',
     first_name: 'Admin',
     last_name: 'Admin',
     date_of_birth: new Date('2000-01-01'),
     email_address: 'admin.test@acme.com',
+    address: {
+        place: 'Existing Username City',
+        postal_code: '12345',
+    },
 };
 
-const newMemberInvalidData: Omit<MemberCreateType, 'books' | 'address'> = {
+const newMemberInvalidData: Omit<MemberCreateType, 'books'> = {
     username: 'invalidData',
-    first_name: 'A A A',
-    last_name: 'Invaliddata',
+    first_name: 'Invalid',
+    last_name: 'Data',
     date_of_birth: new Date('2000-01-01'),
-    email_address: 'invalid.data@acme.com',
+    email_address: 'wrong_email@',
+    address: {
+        place: 'Invalid Data City',
+        postal_code: '12345',
+    },
+    gender: 'INVALID_GENDER' as any,
 };
 
 // ---------------------------------------------------------------------------------------------------------------------------------
