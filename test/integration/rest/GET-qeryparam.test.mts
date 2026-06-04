@@ -137,19 +137,22 @@ describe('GET /rest', () => {
         },
     );
 
-    test.concurrent('No members should be found with invalid search parameters', async () => {
-        // Arrange
-        const params = new URLSearchParams({ foo: 'bar' });
-        const url = `${restURL}?${params}`;
-        const requestHeaders = new Headers();
-        requestHeaders.append(ACCEPT, APPLICATION_JSON);
+    test.concurrent(
+        'No members should be found with invalid search parameters',
+        async () => {
+            // Arrange
+            const params = new URLSearchParams({ foo: 'bar' });
+            const url = `${restURL}?${params}`;
+            const requestHeaders = new Headers();
+            requestHeaders.append(ACCEPT, APPLICATION_JSON);
 
-        // Act
-        const { status } = await fetch(url, {
-            headers: requestHeaders,
-        });
+            // Act
+            const { status } = await fetch(url, {
+                headers: requestHeaders,
+            });
 
-        // Assert
-        expect(status).toBe(404);
-    });
+            // Assert
+            expect(status).toBe(404);
+        },
+    );
 });
