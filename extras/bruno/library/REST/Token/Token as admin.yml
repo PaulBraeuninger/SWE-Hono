@@ -11,12 +11,12 @@ http:
       value: ""
       disabled: true
   body:
-    type: json
-    data: |-
-      {
-          "username": "admin",
-          "password": "p"
-      }
+    type: form-urlencoded
+    data:
+      - name: username
+        value: "{{username}}"
+      - name: password
+        value: "{{password}}"
 
 runtime:
   assertions:
