@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS book (
     name            text NOT NULL,
     isbn            text NOT NULL,
     author          text,
+    still_borrowed  boolean,
     genre           genre,
     member_id       integer NOT NULL REFERENCES member ON DELETE CASCADE
 );
