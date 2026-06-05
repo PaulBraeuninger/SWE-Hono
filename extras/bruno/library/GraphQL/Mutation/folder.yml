@@ -1,0 +1,11 @@
+info:
+  name: Mutation
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit
+
+docs:
+  content: With the GraphQL Api, patients are created, modified and deleted.
+  type: text/markdown

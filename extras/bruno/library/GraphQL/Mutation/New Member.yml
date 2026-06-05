@@ -1,0 +1,64 @@
+info:
+  name: New Member
+  seq: 1
+
+graphql:
+  method: POST
+  url: "{{graphqlUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    query: |-
+      mutation {
+        createMember(
+          memberInput: {
+            username: "testgraphql"
+            firstName: "Test"
+            lastName: "Graphql"
+            gender: MALE
+            dateOfBirth: "1990-01-01"
+            memberSince: "2020-01-01"
+            isStudent: false
+            emailAddress: "mutation@graphql.com"
+            interests: [FANTASY]
+            address: {
+              postalCode: "12345"
+              place: "Test"
+              }
+            books: [
+              {
+                name: "GraphQL for Beginners"
+                isbn: "978-3-16-148410-0"
+                author: "John Doe"
+                stillBorrowed: false
+                genre: NON_FICTION
+              }
+            ]
+          }
+        ) {
+          id
+        }
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/json
+    - expression: res.body.data
+      operator: isJson
+    - expression: res.body.data.create.id
+      operator: gte
+      value: "0"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

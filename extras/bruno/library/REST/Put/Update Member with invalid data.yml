@@ -1,0 +1,60 @@
+info:
+  name: Update Member with invalid data
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "2"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+          "first_name": "wrong first name",
+          "last_name": "wrong surname...",
+          "gender": "M",
+          "date_of_birth": "1990-01-01",
+          "member_since": "2020-01-01",
+          "is_student": false,
+          "email_address": "invalid_email@"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        test('Fehlermeldungen im Response Body', () => {
+          const body = res.getBody();
+          const props = ['first_name', 'last_name', 'email_address'];
+
+          if (Object.keys(body).length == 1 && body.detail !== undefined) {
+            const detailProps = body.detail.map(elem => elem.loc[1]);
+            expect(detailProps).to.have.length(props.length);
+            detailProps.forEach(prop => expect(props).to.include(prop));
+          }
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "422"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/json
+    - expression: res.body.detail
+      operator: isArray
+    - expression: res.body.detail
+      operator: isNotEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

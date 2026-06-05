@@ -1,0 +1,80 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["nativeDistinct", "relationJoins"]
+  engineType      = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["library"]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model Address {
+  id         Int    @id @default(autoincrement())
+  postalCode String @map("postal_code")
+  place      String
+  memberId   Int    @unique @map("member_id")
+  member     Member @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([memberId])
+  @@map("address")
+  @@schema("library")
+}
+
+model Book {
+  id       Int     @id @default(autoincrement())
+  name     String
+  isbn     String
+  author   String?
+  genre    Genre?
+  memberId Int     @map("member_id")
+  member   Member  @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([memberId])
+  @@map("book")
+  @@schema("library")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model Member {
+  id           Int       @id @default(autoincrement())
+  version      Int       @default(0)
+  username     String    @unique
+  firstName    String    @map("first_name")
+  lastName     String    @map("last_name")
+  gender       Gender?
+  dateOfBirth  DateTime  @map("date_of_birth") @db.Date
+  memberSince  DateTime? @map("member_since") @db.Date
+  isStudent    Boolean?  @map("is_student")
+  emailAddress String    @unique @map("email_address")
+  interests    Json?
+  generated    DateTime  @default(now()) @db.Timestamptz(6)
+  updated      DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+  address      Address?
+  books        Book[]
+
+  @@map("member")
+  @@schema("library")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  DIVERSE
+
+  @@map("gender")
+  @@schema("library")
+}
+
+enum Genre {
+  FANTASY
+  THRILLER
+  SCIENCE_FICTION
+  CRIME_NOVEL
+  NON_FICTION
+
+  @@map("genre")
+  @@schema("library")
+}
